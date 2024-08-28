@@ -1,32 +1,63 @@
 /**
  * @author : Ameer Heiba
- * @description : This file contains the User Mongo Model
- * @date : 27/09/2022
+ * @description : This file contains the User Sequelize Model
+ * @date : 28/08/2024
  * 
- * @param {Object} mongoose - The Mongoose module used to create the model.
- * @param {Object} UserSchema - The Mongoose schema used to create the model.
- * @param {Function} model - The Mongoose model used to create the model.
+ * @param {Object} Sequelize - The Sequelize module used to create the model.
+ * @param {Object} DataTypes - The DataTypes module used to create the model.
+ * @param {Object} User - The User model used to create the model.
+ * @param {Object} sequelize - The Sequelize connection used to create the model.
+ * 
+ * 
  * 
  */
 
 
 
+const {Sequelize, DataTypes} = require("sequelize");
 
+const sequelize = require("../assets/SQLDB/db");
 
-const mongoose = require("mongoose");
-
-const UserSchema = new mongoose.Schema(
-  {
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    fullName: { type: String, required: true },
-    profilePic: { type: String, defaut: "" },
-    isAdmin: { type: Boolean, default: false },
-    isModerator: { type: Boolean, default: false },
-    isPrime: { type: Boolean, default: false },
+const User = sequelize.define("User", {
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
   },
-  { timestamps: true }
-);
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  fullName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  profilePic: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  isAdmin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  isModerator: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  isPrime: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  }
+}, {
+  timestamps: true
+});
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = User;
