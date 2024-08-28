@@ -1,3 +1,6 @@
+
+
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -8,6 +11,7 @@ require("dotenv").config();
 
 // const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +19,7 @@ app.use(bodyParser.json());
 
 // app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -33,9 +38,6 @@ mongoose.connect(process.env.MONGO_URI, {
     })
     .catch((error) => console.log(error));
         
-
-    
-
 })
 .catch((error) => {
     console.log("Error connecting to MongoDB",error);
