@@ -21,13 +21,13 @@ const CreateTvShow = async (req, res) => {
     imgSm,
     trailer,
     video,
-    schedule,
     language,
     avgRuntime,
     ReleaseYear,
-    rate,
+    rating,
     genre,
     Seasons,
+    Episodes,
   } = req.body;
   try {
     const tvShow = new TvShow({
@@ -38,21 +38,23 @@ const CreateTvShow = async (req, res) => {
       imgSm,
       trailer,
       video,
-      schedule,
       language,
       avgRuntime,
       ReleaseYear,
-      rate,
+      rating,
       genre,
       Seasons,
+      Episodes,
+      Createdby: req.user.id,
+      Updatedby: req.user.id,
     });
-    const newTvShow = await tvShow.save();
+    const savedTvShow = await tvShow.save();
     res.status(200).json(savedTvShow);
   } catch (err) {
     res.status(500).json({ Error: err.message });
   }
 };
-const getTvShow = async (req, res) => {
+const getTvShowById = async (req, res) => {
   const { id } = req.params;
   try {
     const tvShow = await TvShow.findById(id);
@@ -63,7 +65,7 @@ const getTvShow = async (req, res) => {
 };
 const getAllTvShows = async (req, res) => {
   try {
-    const tvShow = await TvShow.findAll({});
+    const tvShows = await TvShow.findAll({});
     res.status(200).json(tvShows);
   } catch (err) {
     res.status(500).json({ Error: err.message });
@@ -79,13 +81,13 @@ const updateTvShow = async (req, res) => {
     imgSm,
     trailer,
     video,
-    schedule,
     language,
     avgRuntime,
     ReleaseYear,
-    rate,
+    rating,
     genre,
     Seasons,
+    Episodes,
   } = req.body;
   try {
     const tvShow = await TvShow.findById(id);
@@ -100,9 +102,11 @@ const updateTvShow = async (req, res) => {
     tvShow.language = language;
     tvShow.avgRuntime = avgRuntime;
     tvShow.ReleaseYear = ReleaseYear;
-    tvShow.rate = rate;
+    tvShow.rating = rating;
     tvShow.genre = genre;
     tvShow.Seasons = Seasons;
+    tvShow.Episodes = Episodes;
+    tvShow.Updatedby = req.user.id;
     const updatedTvShow = await tvShow.save();
     res.status(200).json(updatedTvShow);
   } catch (err) {
@@ -120,4 +124,4 @@ const deleteTvShow = async (req, res) => {
   }
 };
 
-module.exports = { getAllTvShows, CreateTvShow , getTvShow, updateTvShow, deleteTvShow };
+module.exports = { getAllTvShows, CreateTvShow, getTvShowById, updateTvShow, deleteTvShow };
