@@ -13,6 +13,7 @@ const MovieSchema = new mongoose.Schema(
     rate: { type: Number },
     genre: { type: String },
     
+    
   },
   { timestamps: true }
 );
