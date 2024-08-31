@@ -65,9 +65,10 @@ const getTvShowById = async (req, res) => {
 };
 const getAllTvShows = async (req, res) => {
   try {
-    const tvShows = await TvShow.findAll({});
+    const tvShows = await TvShow.find({});
     res.status(200).json(tvShows);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ Error: err.message });
   }
 };

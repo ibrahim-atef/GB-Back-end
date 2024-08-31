@@ -22,18 +22,18 @@ app.use(bodyParser.json());
 
 
 // app.use("/user", userRoutes);
+app.use("/TvShows", TvShowRoutes);
 app.use("/auth", authRoutes);
 
 app.use("/admin", adminRoutes);
 
-app.use("/TvShows", TvShowRoutes);
+
 
 
 
 
 mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+ 
     authSource: "admin"
     
 }).then(() => {
