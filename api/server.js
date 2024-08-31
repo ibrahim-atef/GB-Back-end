@@ -9,9 +9,13 @@ const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
 require("dotenv").config();
 
+
 // const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+
+const TvShowRoutes = require("./routes/shows");
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,7 +23,12 @@ app.use(bodyParser.json());
 
 // app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
+
 app.use("/admin", adminRoutes);
+
+app.use("/TvShows", TvShowRoutes);
+
+
 
 
 mongoose.connect(process.env.MONGO_URI, {
