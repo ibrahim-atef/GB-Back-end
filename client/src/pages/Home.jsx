@@ -1,4 +1,4 @@
-import HeroSlide from "../coponents/hero-slide/HeroSlide";
+import HeroSlide from "../coponents/utilitiesCpmponents/hero-slide/HeroSlide";
 
 const Home = () => {
   return (
