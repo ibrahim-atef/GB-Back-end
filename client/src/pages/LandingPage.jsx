@@ -38,16 +38,20 @@ const LandingPage = () => {
     <div>
       <Header isLandingPage={true} />
       <SectionOne />
-      {landingBlocks.map((block, index) => (
-        <BlockData
-          key={block._id}
-          title={block.title}
-          imgSrc={`${API_BASE_URL}${block.imgUrl}`}
-          desc={block.desc}
-          direction={index % 2 === 0 ? "right" : "left"}
-        />
-      ))}
-      <FaqSection faqItems={faqs} />
+      {landingBlocks && landingBlocks.length > 0 && (
+        landingBlocks.map((block, index) => (
+          <BlockData
+            key={block._id}
+            title={block.title}
+            imgSrc={`${API_BASE_URL}${block.imgUrl}`}
+            desc={block.desc}
+            direction={index % 2 === 0 ? "right" : "left"}
+          />
+        ))
+      )}
+      {faqs && faqs.length > 0 && (
+        <FaqSection faqItems={faqs} />
+      )}
       <Footer />
     </div>
   );
