@@ -22,15 +22,7 @@ const AccordionComponent = ({ items }) => {
           >
             <span className="accordion-title">{item.title}</span>
             <div className={`accordion-toggle ${openIndex === index ? 'open' : ''}`}>
-              {openIndex === index ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 12H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
+              {openIndex === index ? '-' : '+'}
             </div>
           </div>
           {openIndex === index && (

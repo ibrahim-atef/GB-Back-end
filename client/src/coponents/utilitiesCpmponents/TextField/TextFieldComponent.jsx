@@ -3,20 +3,20 @@ import PropTypes from 'prop-types';
 import './TextFieldComponent.scss';
 
 const TextFieldComponent = ({
-  hintText,
-  prefixItem,
-  value,
-  onChange,
-  onFocus,
-  onBlur,
-  type, // Add type prop
+  hintText = '',
+  prefixItem = null,
+  value = '',
+  onChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
+  type = 'text', // Set default value for the type prop here
   ...props
 }) => {
   return (
     <div className="text-field-component">
       {prefixItem && <div className="prefix">{prefixItem}</div>}
       <input
-        type={type} // Use the type prop for the input type
+        type={type}
         value={value}
         onChange={onChange}
         onFocus={onFocus}
@@ -35,17 +35,7 @@ TextFieldComponent.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
-  type: PropTypes.string, // Add type prop to propTypes
-};
-
-TextFieldComponent.defaultProps = {
-  hintText: '',
-  prefixItem: null,
-  value: '',
-  onChange: () => {},
-  onFocus: () => {},
-  onBlur: () => {},
-  type: 'text', // Default type is 'text'
+  type: PropTypes.string,
 };
 
 export default TextFieldComponent;

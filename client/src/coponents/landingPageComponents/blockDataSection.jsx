@@ -11,6 +11,8 @@ const BlockData = ({ title, imgSrc, direction = "left", desc }) => {
       <div className="image">
         <img src={imgSrc} alt={title} />
       </div>
+      <div className="divider"></div> {/* Add divider */}
+
     </section>
   );
 };

@@ -1,50 +1,41 @@
 @use "../../../scss/" as *;
 
 .footer {
-  position: relative;
-  background-position: top;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 6rem 2rem;
-  &__content {
-    max-width: 1000px;
-    &__logo {
-      @include flex(center, center);
-      margin-bottom: 3rem;
+  background-color: #000;
+  padding: 40px 40px;
+  color: #b3b3b3;
+  font-family: 'Netflix Sans', sans-serif;
 
-      img {
-        width: 8rem;
-        margin-right: 10px;
-      }
-    }
-    &__menus {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      @include mobile {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    &__menu {
-      @include flex(flex-start, flex-start);
-      flex-direction: column;
-      margin-top: 1rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-      & > * ~ * {
-        margin-top: 0.5rem;
+  &__contact {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.43px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  &__menus {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+
+    a {
+      color: #b3b3b3;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
+      text-align: left;
+      margin-bottom: 10px;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
-}
-.footer__bottom {
-  padding-top: 3rem;
-  text-align: center;
-}
-
-.footer__text {
-  font-size: 1.5rem;
-}
-
-.footer__text span {
-  color: $main-color;
 }

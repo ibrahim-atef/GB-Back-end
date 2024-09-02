@@ -56,15 +56,17 @@
   .accordion-toggle {
     width: 1rem;
     height: 1rem;
-    font-size: 1rem; // Adjust size as needed
-    transition: transform 0.3s ease;
+    font-size: 1.8rem; // Adjust size as needed
+    transition: transform 0.8s ease;  display: flex;
+    justify-content: center;
+    align-items: center;
 
     svg {
       stroke: #fff; // Adjust color as needed
     }
 
     &.open {
-      transform: rotate(45deg);
+      
     }
   }
 
