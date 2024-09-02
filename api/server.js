@@ -19,6 +19,9 @@ const landingBlockRoutes = require("./routes/landingBlockRoutes"); // Import Lan
 
 const app = express();
 app.use(cors());
+app.use((req, res, next) => {
+    res.status(404).json({ message: "api route not found" });
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
