@@ -14,14 +14,17 @@ const mongoose = require("mongoose");
 const SeriesSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    seasons: { type: Number, required: true },
-    episode: { type: Number, required: true },
-    coverPic: { type: String, defaut: "" },
+    seasons: { type: Array, required: true },
+    episodes: { type: Array, required: true },
+    coverPic: { type: String, default: "" },
     yearOfPublish: { type: Number, required: true },
     trailer: { type: String, required: true },
     video: { type: String, required: true },
-    rate: { type: Number },
+    rating: { type: Number },
+    createdBy: { type: String, required: true },
+    updatedBy: { type: String, required: true },
   },
+
   { timestamps: true }
 );
 
