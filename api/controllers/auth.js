@@ -8,6 +8,14 @@
  * @param {Object} jwt - The jwt module.
  * @param {Function} register - Controller function to handle user registration.
  * @param {Function} login - Controller function to handle user login using JWT.
+ * @param {Function} sendPasswordResetEmail - Controller function to send password reset email.
+ * @param {Function} resetPassword - Controller function to handle password reset.
+ * @param {Function} requestPasswordReset - Controller function to handle password reset request.   
+ * @param {Function} utils - The utils module.
+ * @param {Function} crypto - The crypto module.
+ * @param {Function} sgMail - The sendgrid module.
+ * @param {Function} Op - The Op module.
+ * 
  * 
  */
 
