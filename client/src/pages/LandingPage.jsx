@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import   { useEffect, useState } from "react";
 import SectionOne from "../coponents/landingPageComponents/SectionOne";
 import Header from "../coponents/utilitiesCpmponents/header/Header";
 import Footer from "../coponents/utilitiesCpmponents/footer/Footer.jsx";
 import BlockData from "../coponents/landingPageComponents/blockDataSection";
 import FaqSection from "../coponents/landingPageComponents/FaqSection";
-import { API_BASE_URL } from "../../src/constants.js";
+import { API_BASE_URL } from "../constants";
+
+import landingPageApi from "../api/landingPageApi";  // Import the API
+
 const LandingPage = () => {
   const [landingBlocks, setLandingBlocks] = useState([]);
   const [faqs, setFaqs] = useState([]);
@@ -12,14 +15,12 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchLandingPageData = async () => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/landingBlocks/AllLandingPageData`
-        );
-        const data = await response.json();
+        const data = await landingPageApi.getLandingPageData();  // Use the new API method
 
         setLandingBlocks(data.landingBlocks);
+        console.log(data.landingBlocks);
 
-        // Transform FAQ data to match AccordionComponent's expected structure
+        // Transform FAQ data to match FaqSection's expected structure
         const formattedFaqs = data.faqs.map((faq) => ({
           title: faq.question,
           children: faq.answer,
@@ -43,7 +44,7 @@ const LandingPage = () => {
           <BlockData
             key={block._id}
             title={block.title}
-            imgSrc={`${API_BASE_URL}${block.imgUrl}`}
+            imgSrc={`${API_BASE_URL}${block.imgUrl}`}  // imgUrl now comes directly from API
             desc={block.desc}
             direction={index % 2 === 0 ? "right" : "left"}
           />
