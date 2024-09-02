@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Sequelize = require("sequelize");
+const cors = require("cors");
 const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
 require("dotenv").config();
@@ -12,14 +13,26 @@ require("dotenv").config();
 // const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");
+// // CORS options
+// const corsOptions = {
+//     origin: 'http://example.com', // Allow only this origin
+//     methods: 'GET,POST', // Allow only GET and POST requests
+//     optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+// };
+
+// // Enable CORS with custom options
+// app.use(cors(corsOptions));
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 
-// app.use("/user", userRoutes);
+
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI, {

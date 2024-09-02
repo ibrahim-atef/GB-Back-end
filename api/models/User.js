@@ -55,9 +55,24 @@ const User = sequelize.define("User", {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
-  }
+  },
+  resetPasswordToken: {
+    type: DataTypes.STRING,
+  },
+  resetPasswordExpires: {
+    type: DataTypes.DATE,
+},
 }, {
   timestamps: true
 });
 
 module.exports = User;
+
+
+
+
+
+
+
+
+
