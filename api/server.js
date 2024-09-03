@@ -6,19 +6,18 @@ const cors = require("cors");
 const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
 require("dotenv").config();
-const cors = require("cors");
+
 
  
 // const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const showsRoutes = require("./routes/shows");
-const landingBlockRoutes = require("./routes/landingBlockRoutes");  
+// const landingBlockRoutes = require("./routes/landingBlockRoutes");  
 const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
-const moviesRoutes = require("./routes/movies");
 const seriesRoutes = require("./routes/series");
-const showsRoutes = require("./routes/shows");
+
 // // CORS options
 // const corsOptions = {
 //     origin: 'http://example.com', // Allow only this origin
@@ -41,11 +40,11 @@ app.use("/user", userRoutes);
 app.use("/movies", moviesRoutes);
 app.use("/series", seriesRoutes);
 app.use("/shows", showsRoutes);
-app.use("/landingBlocks", landingBlockRoutes);
+// app.use("/landingBlocks", landingBlockRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
     authSource: "admin"
 })
 .then(() => {

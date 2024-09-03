@@ -16,15 +16,15 @@ const {
   getSeriesById,
   updateSeries,
   deleteSeries,
-} = require("../controllers/seriesController");
+} = require("../controllers/series");
 
 // Routes for series collection
-router.route("/series").get(getAllSeries);
-router.route("/series").post(createSeries);
+router.get("/series", getAllSeries);
+router.post("/add-series", createSeries);
 
 // Routes for a single series by ID
-router.route("/series/:id").get(getSeriesById);
-router.route("/series/:id").put(updateSeries);
-router.route("/series/:id").delete(deleteSeries);
+router.get("/fetch-series/:id", getSeriesById);
+router.put("/update-series/:id", updateSeries);
+router.delete("/delete-series/:id", deleteSeries);
 
 module.exports = router;

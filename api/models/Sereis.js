@@ -21,8 +21,8 @@ const SeriesSchema = new mongoose.Schema(
     trailer: { type: String, required: true },
     video: { type: String, required: true },
     rating: { type: Number },
-    createdBy: { type: String, required: true },
-    updatedBy: { type: String, required: true },
+    createdBy: { type: Number, required: true },
+    updatedBy: { type: Number, required: true },
   },
 
   { timestamps: true }
