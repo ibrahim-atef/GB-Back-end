@@ -1,6 +1,3 @@
-
-
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -9,10 +6,15 @@ const cors = require("cors");
 const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
 require("dotenv").config();
+const cors = require("cors");
 
+ 
 // const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const TvShowRoutes = require("./routes/shows");
+const landingBlockRoutes = require("./routes/landingBlockRoutes");  
+const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
 const moviesRoutes = require("./routes/movies");
 const seriesRoutes = require("./routes/series");
@@ -45,8 +47,8 @@ mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     authSource: "admin"
-    
-}).then(() => {
+})
+.then(() => {
     console.log("Connected to MongoDB");
 
     initDB()
@@ -55,9 +57,8 @@ mongoose.connect(process.env.MONGO_URI, {
             console.log(`Server started on port ${process.env.DEV_API_PORT}`);
         });
     })
-    .catch((error) => console.log(error));
-        
+    .catch((error) => console.log("Error initializing database:", error));
 })
 .catch((error) => {
-    console.log("Error connecting to MongoDB",error);
-})
+    console.log("Error connecting to MongoDB:", error);
+});
