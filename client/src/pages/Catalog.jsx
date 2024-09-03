@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import PageHeader from "../coponents/page-header/PageHeader";
+import PageHeader from "../coponents/utilitiesCpmponents/page-header/PageHeader";
 import { category as cate } from "../api/tmdbApi";
-import MovieGrid from "../coponents/movie-grid/MovieGrid";
+import MovieGrid from "../coponents/utilitiesCpmponents/movie-grid/MovieGrid";
 
 const Catalog = () => {
   const { category } = useParams();

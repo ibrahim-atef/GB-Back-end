@@ -3,7 +3,8 @@ import HeroSlide from "../coponents/hero-slide/HeroSlide";
 import { OutlinedButton } from "../coponents/button/Button";
 import MovieList from "../coponents/movieList/MovieList";
 import { category, movieType } from "../api/tmdbApi";
-const Home = () => {
+ 
+ const Home = () => {
   return (
     <div>
       <HeroSlide />
