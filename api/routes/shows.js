@@ -19,7 +19,7 @@ const TvShowController = require("../controllers/TvShow");
 
 router.get("/tvshows", TvShowController.getAllTvShows);
 router.post("/tvshows", TvShowController.CreateTvShow);
-router.get("/tvshows/:id", TvShowController.getTvShow);
+router.get("/tvshows/:id", TvShowController.getTvShowById);
 router.put("/tvshows/:id", TvShowController.updateTvShow);
 router.delete("/tvshows/:id", TvShowController.deleteTvShow);
 

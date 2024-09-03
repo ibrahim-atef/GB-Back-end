@@ -30,8 +30,6 @@ const createMovie = async (req, res) => {
     writer,
     actors,
     url,
-    createdBy = req.user.id,
-    updatedBy = req.user.id,
   } = req.body;
   try {
     const movie = new Movie({
@@ -52,9 +50,11 @@ const createMovie = async (req, res) => {
       writer,
       actors,
       url,
+      createdBy: req.user.id,
+      updatedBy: req.user.id,
     });
     const newMovie = await movie.save();
-    res.status(200).json(savedMovie);
+    res.status(200).json(newMovie);
   } catch (err) {
     res.status(500).json({ Error: err.message });
   }
@@ -70,8 +70,8 @@ const getMovieById = async (req, res) => {
 };
 const getAllMovies = async (req, res) => {
   try {
-    const movie = await Movie.findAll({});
-    res.status(200).json(movies);
+    const movie = await Movie.find({});
+    res.status(200).json(movie);
   } catch (err) {
     res.status(500).json({ Error: err.message });
   }
@@ -96,9 +96,9 @@ const updateMovieById = async (req, res) => {
     writer,
     actors,
     url,
-    updatedBy = req.user.id,
+    
   } = req.body;
-  try {
+  try { // Try to find better way to update only given new data
     const movie = await Movie.findById(id);
     movie.title = title;
     movie.desc = desc;
@@ -128,8 +128,7 @@ const updateMovieById = async (req, res) => {
 const deleteMovieById = async (req, res) => {
   const { id } = req.params;
   try {
-    const movie = await Movie.findById(id);
-    await movie.remove();
+    const movie = await Movie.findByIdAndDelete(id);
     res.status(200).json("Movie has been deleted...");
   } catch (err) {
     res.status(500).json({ Error: err.message });

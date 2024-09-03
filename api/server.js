@@ -14,6 +14,9 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
+const moviesRoutes = require("./routes/movies");
+const seriesRoutes = require("./routes/series");
+const showsRoutes = require("./routes/shows");
 // // CORS options
 // const corsOptions = {
 //     origin: 'http://example.com', // Allow only this origin
@@ -33,6 +36,9 @@ app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
+app.use("/movies", moviesRoutes);
+app.use("/series", seriesRoutes);
+app.use("/shows", showsRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI, {
