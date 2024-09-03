@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "94b317a1-435d-4ec5-9116-7225f690418d",
+		"name": "GP-ITI-ITP-MEARN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8410538"
+	},
+	"item": [
+		{
+			"name": "POST Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\":\"Ameer Hieba\",\r\n    \"email\":\"heibaameer@gmail.com\",\r\n    \"password\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/auth/register",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"heibaameer@gmail.com\",\r\n    \"password\":\"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/auth/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Current User Profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6ImFkbWluIiwiaXNQcmltZSI6ZmFsc2UsImlhdCI6MTcyNTIxNDEzMywiZXhwIjoxNzI1MjE3NzMzfQ.N83d8XExx_UkcG1a1ApxrKjn-izuuzKcEjJ8xPG3Iaw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:3000/user/profile",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Update Current User Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6ImFkbWluIiwiaXNQcmltZSI6ZmFsc2UsImlhdCI6MTcyNTIxNDEzMywiZXhwIjoxNzI1MjE3NzMzfQ.N83d8XExx_UkcG1a1ApxrKjn-izuuzKcEjJ8xPG3Iaw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"fullName\": \"Ameer Abdullah Heiba\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/user/profile",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Request Reset Password",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "POST Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/auth/reset-password/:token",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"reset-password",
+						":token"
+					],
+					"variable": [
+						{
+							"key": "token",
+							"value": "a8934e3ec97a2aeb4a7872fda970de17e9084005ce5cd2e7b4d146fc3c4e6f4d"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
