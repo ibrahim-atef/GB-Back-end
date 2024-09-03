@@ -12,7 +12,7 @@ const cors = require("cors");
 // const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
-const TvShowRoutes = require("./routes/shows");
+const showsRoutes = require("./routes/shows");
 const landingBlockRoutes = require("./routes/landingBlockRoutes");  
 const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
@@ -41,7 +41,7 @@ app.use("/user", userRoutes);
 app.use("/movies", moviesRoutes);
 app.use("/series", seriesRoutes);
 app.use("/shows", showsRoutes);
-
+app.use("/landingBlocks", landingBlockRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
