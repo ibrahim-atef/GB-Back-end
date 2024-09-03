@@ -10,7 +10,7 @@ const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
 require("dotenv").config();
 
-// const userRoutes = require("./routes/user");
+// const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
