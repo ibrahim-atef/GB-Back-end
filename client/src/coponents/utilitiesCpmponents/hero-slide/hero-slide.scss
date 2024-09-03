@@ -71,6 +71,7 @@
       .btns,
       .title,
       .overview {
+        
         opacity: 0;
         transform: translateY(-100px);
         transition: transform 0.5s ease, opacity 0.5s ease;

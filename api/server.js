@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const TvShowRoutes = require("./routes/shows");
 const landingBlockRoutes = require("./routes/landingBlockRoutes");  
+const moviesRoutes = require("./routes/movies");
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use("/TvShows", TvShowRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/landingBlocks", landingBlockRoutes); 
+app.use("/movies", moviesRoutes);
 
  
 app.get('/', (req, res) => {

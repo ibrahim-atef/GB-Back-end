@@ -1,39 +1,20 @@
-import "./hero-slide.scss"; //
-import PropTypes from "prop-types"; //
-import tmdbApi, { category, movieType } from "../../../api/tmdbApi"; //
-import apiConfig from "../../../api/apiConfig"; //
-import { useEffect, useState, useRef } from "react"; // useHistory
-// import { Swiper, SwiperSlide } from "swiper/react"; //
-import Button, { OutlinedButton } from "../button/Button"; //
-import Modal, { ModalContent } from "../modal/Modal"; //
-import { useNavigate } from "react-router-dom"; //
-// import SwiperCore ,{ Autoplay } from "swiper"; //
+import "./hero-slide.scss";
+import PropTypes from "prop-types";
+import { useEffect, useState, useRef } from "react";
+import Button, { OutlinedButton } from "../button/Button";
+import Modal, { ModalContent } from "../modal/Modal";
+import { useNavigate } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-const HeroSlide = () => {
-  const [movieItems, setMovieItems] = useState([]);
+const HeroSlide = ({ movieItems }) => {
   const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
       align: "start",
     },
-    [Autoplay({ delay: 3000 })]
+    [Autoplay({ delay: 50000 })]
   );
-  useEffect(() => {
-    const getMovies = async () => {
-      const params = { page: 1 };
-      try {
-        const response = await tmdbApi.getMoviesList(movieType.popular, {
-          params,
-        });
-        setMovieItems(response.results.slice(0, 4));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMovies();
-  }, []);
 
   return (
     <div className="hero-slide">
@@ -53,34 +34,26 @@ const HeroSlide = () => {
   );
 };
 
-const HeroSlideItem = (props) => {
-  let navigate = useNavigate();
+const HeroSlideItem = ({ item, className }) => {
+  const navigate = useNavigate();
 
-  const item = props.item;
-  const background = apiConfig.originalImage(
-    item.backdrop_path ? item.backdrop_path : item.poster_path
-  );
+  const background = item.backdrop_path
+    ? item.backdrop_path
+    : item.poster_path;
+
   const setModalActive = async () => {
     const modal = document.querySelector(`#modal_${item.id}`);
-
-    const videos = await tmdbApi.getVideos(category.movie, item.id);
-    // console.log(videos);
-
-    if (videos.results.length > 0) {
-      const videSrc = "https://www.youtube.com/embed/" + videos.results[0].key;
-      modal
-        .querySelector(".modal__content > iframe")
-        .setAttribute("src", videSrc);
-    } else {
-      modal.querySelector(".modal__content").innerHTML = "No trailer";
-    }
+    const videoSrc = item.trailerUrl || "No trailer available"; // Handle missing trailers
+    modal
+      .querySelector(".modal__content > iframe")
+      .setAttribute("src", videoSrc);
 
     modal.classList.toggle("active");
   };
 
   return (
     <div
-      className={`hero-slide__item ${props.className}`}
+      className={`hero-slide__item ${className}`}
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="hero-slide__item__content container">
@@ -92,28 +65,23 @@ const HeroSlideItem = (props) => {
               Watch Now
             </Button>
             <OutlinedButton onClick={setModalActive}>
-              {/* <i className="bx bx-plus"></i> */}
               <span>Watch trailer</span>
             </OutlinedButton>
           </div>
         </div>
         <div className="hero-slide__item__content__poster">
-          <img src={apiConfig.w500Image(item.poster_path)} alt="" />
+          <img src={item.poster_path} alt="" />
         </div>
       </div>
     </div>
   );
 };
 
-const TrailerModal = (props) => {
-  const item = props.item;
-
+const TrailerModal = ({ item }) => {
   const iframeRef = useRef(null);
   const onClose = () => {
     iframeRef.current.setAttribute("src", "");
   };
-  //there is a bug here when closing it still playing until open it again
-  //solved by using onclose function as props to modal and call it with x button in modal
 
   return (
     <Modal active={false} id={`modal_${item.id}`}>
@@ -129,13 +97,26 @@ const TrailerModal = (props) => {
   );
 };
 
+HeroSlide.propTypes = {
+  movieItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      backdrop_path: PropTypes.string,
+      poster_path: PropTypes.string.isRequired,
+      overview: PropTypes.string,
+      trailerUrl: PropTypes.string, // New field for the trailer URL
+    })
+  ).isRequired,
+};
+
 HeroSlideItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   className: PropTypes.string,
 };
 
 TrailerModal.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
 };
 
 export default HeroSlide;

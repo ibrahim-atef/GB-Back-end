@@ -70,8 +70,8 @@ const getMovieById = async (req, res) => {
 };
 const getAllMovies = async (req, res) => {
   try {
-    const movie = await Movie.findAll({});
-    res.status(200).json(movies);
+    const movie = await Movie.find({});
+    res.status(200).json(movie);
   } catch (err) {
     res.status(500).json({ Error: err.message });
   }
