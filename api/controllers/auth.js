@@ -2,7 +2,7 @@
  * @author : Ameer Heiba
  * @description : This file contains the authications controllers
  * @date : 28/08/2024
- * 
+ *
  * @param {Object} User - The User model.
  * @param {Object} bcrypt - The bcrypt module.
  * @param {Object} jwt - The jwt module.
@@ -38,30 +38,32 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const register = async (req, res) => {
-    const { fullName, email, password } = req.body;
+  const { fullName, email, password } = req.body;
 
-    // Basic validation
-    if (!fullName || !email || !password) {
-        return res.status(400).json({ message: "All fields are required." });
+  // Basic validation
+  if (!fullName || !email || !password) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  // Check if the email is already registered
+  try {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email is already registered." });
     }
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error checking existing user.", error: err });
+  }
 
-    // Check if the email is already registered
-    try {
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(409).json({ message: "Email is already registered." });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: "Error checking existing user.", error: err });
-    }
+  // Generate a unique username
+  const username = email.split("@")[0] + Math.floor(Math.random() * 100);
 
-    // Generate a unique username
-    const username = email.split("@")[0] + Math.floor(Math.random() * 100);
-
-    try {
-        // Hash the password with a configurable salt rounds
-        const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+  try {
+    // Hash the password with a configurable salt rounds
+    const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         // Create the new user object
         const newUser = await User.create({
@@ -91,9 +93,8 @@ const register = async (req, res) => {
     }
 };
 
-
 const signIn = async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
     // Basic validation
     if (!email || !password) {
