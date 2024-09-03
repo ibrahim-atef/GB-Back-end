@@ -2,19 +2,17 @@
  * @author : Ameer Heiba
  * @description : This file contains the User Sequelize Model
  * @date : 28/08/2024
- * 
+ *
  * @param {Object} Sequelize - The Sequelize module used to create the model.
  * @param {Object} DataTypes - The DataTypes module used to create the model.
  * @param {Object} User - The User model used to create the model.
  * @param {Object} sequelize - The Sequelize connection used to create the model.
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
-
-
-const {Sequelize, DataTypes} = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = require("../assets/SQLDB/db");
 
