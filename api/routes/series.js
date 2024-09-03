@@ -19,13 +19,12 @@ const {
 } = require("../controllers/seriesController");
 
 // Routes for series collection
-router.route("/series").get(getAllSeries).post(createSeries);
+router.route("/series").get(getAllSeries);
+router.route("/series").post(createSeries);
 
 // Routes for a single series by ID
-router
-  .route("/series/:id")
-  .get(getSeriesById)
-  .put(updateSeries)
-  .delete(deleteSeries);
+router.route("/series/:id").get(getSeriesById);
+router.route("/series/:id").put(updateSeries);
+router.route("/series/:id").delete(deleteSeries);
 
 module.exports = router;
