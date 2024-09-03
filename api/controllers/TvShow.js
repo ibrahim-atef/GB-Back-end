@@ -1,7 +1,7 @@
 /**
  * @author : Shehab gamal
  * @description : This file contains the TvShow Mongo Model
- * @date : 02/09/2024
+ * @date : 03/09/2024
  *
  *
  * @param {Object} TvShowControllers - The Mongoose schema used to create the model.
@@ -14,41 +14,13 @@
 const TvShow = require("../models/TvShow");
 
 const CreateTvShow = async (req, res) => {
-  const {
-    title,
-    desc,
-    img,
-    imgTitle,
-    imgSm,
-    trailer,
-    video,
-    language,
-    avgRuntime,
-    ReleaseYear,
-    rating,
-    genre,
-    Seasons,
-    Episodes,
-  } = req.body;
   try {
     const tvShow = new TvShow({
-      title,
-      desc,
-      img,
-      imgTitle,
-      imgSm,
-      trailer,
-      video,
-      language,
-      avgRuntime,
-      ReleaseYear,
-      rating,
-      genre,
-      Seasons,
-      Episodes,
-      Createdby: req.user.id,
-      Updatedby: req.user.id,
+      ...req.body, // Spread the properties from req.body
+      Createdby: req.user.id, // Add the created by user
+      Updatedby: req.user.id, // Add the updated by user
     });
+
     const savedTvShow = await tvShow.save();
     res.status(200).json(savedTvShow);
   } catch (err) {
@@ -72,53 +44,38 @@ const getAllTvShows = async (req, res) => {
     res.status(500).json({ Error: err.message });
   }
 };
+
 const updateTvShow = async (req, res) => {
   const { id } = req.params;
-  const {
-    title,
-    desc,
-    img,
-    imgTitle,
-    imgSm,
-    trailer,
-    video,
-    language,
-    avgRuntime,
-    ReleaseYear,
-    rating,
-    genre,
-    Seasons,
-    Episodes,
-  } = req.body;
+  const updates = req.body;
+
   try {
-    const tvShow = await TvShow.findById(id);
-    tvShow.title = title;
-    tvShow.desc = desc;
-    tvShow.img = img;
-    tvShow.imgTitle = imgTitle;
-    tvShow.imgSm = imgSm;
-    tvShow.trailer = trailer;
-    tvShow.video = video;
-    tvShow.schedule = schedule;
-    tvShow.language = language;
-    tvShow.avgRuntime = avgRuntime;
-    tvShow.ReleaseYear = ReleaseYear;
-    tvShow.rating = rating;
-    tvShow.genre = genre;
-    tvShow.Seasons = Seasons;
-    tvShow.Episodes = Episodes;
-    tvShow.Updatedby = req.user.id;
-    const updatedTvShow = await tvShow.save();
+    // Using the `new: true` option to return the updated document
+    const updatedTvShow = await TvShow.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true, // Ensures the update is validated against the schema
+    });
+
+    if (!updatedTvShow) {
+      return res.status(404).json({ message: "TV Show not found" });
+    }
+
     res.status(200).json(updatedTvShow);
   } catch (err) {
     res.status(500).json({ Error: err.message });
   }
 };
+
 const deleteTvShow = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const tvShow = await TvShow.findById(id);
-    await tvShow.remove();
+    const deletedTvShow = await TvShow.findByIdAndDelete(id);
+
+    if (!deletedTvShow) {
+      return res.status(404).json({ message: "TV Show not found" });
+    }
+
     res.status(200).json("TvShow has been deleted...");
   } catch (err) {
     res.status(500).json({ Error: err.message });
