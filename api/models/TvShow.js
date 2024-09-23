@@ -11,6 +11,7 @@
  */
 
 const mongoose = require("mongoose");
+
 const TvShowSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, unique: true },
@@ -25,8 +26,11 @@ const TvShowSchema = new mongoose.Schema(
     ReleaseYear: { type: String },
     rating: { type: Number },
     genre: [{ type: String }],
-    Seasons: [{ type: Number }],
-    Episodes: { type: Number },
+    seasons: [
+      { type: Number, episodes: [{ type: String }] },
+      // Add more seasons as needed
+    ],
+    // Episodes: { type: Number },
     Createdby: { type: Number },
     Updatedby: { type: Number },
   },
