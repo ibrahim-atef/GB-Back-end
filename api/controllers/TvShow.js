@@ -37,7 +37,7 @@ const CreateTvShow = async (req, res) => {
 //     res.status(500).json({ Error: err.message });
 //   }
 // };
-const getTvShowById = async (req, res) => {
+const streamTvShow = async (req, res) => {
   const { tvshowId, seasonId, episodeId } = req.params;
   //find tvshow by id
   const tvShow = await TvShow.findById(tvshowId);
@@ -138,4 +138,11 @@ const deleteTvShow = async (req, res) => {
   }
 };
 
-module.exports = { getAllTvShows, CreateTvShow, getTvShowById, updateTvShow, deleteTvShow };
+module.exports = {
+  getAllTvShows,
+  CreateTvShow,
+  getTvShowById,
+  updateTvShow,
+  deleteTvShow,
+  streamTvShow,
+};

@@ -1,0 +1,31 @@
+{
+    "title": "Epic Adventures",
+    "desc": "A thrilling journey through the world's most beautiful landscapes.",
+    "img": "https://example.com/image.jpg",
+    "imgTitle": "Epic Adventures Poster",
+    "imgSm": "https://example.com/image-sm.jpg",
+    "trailer": "https://youtube.com/trailer",
+    "video": "https://example.com/full-video.mp4",
+    "language": ["English", "Spanish"],
+    "avgRuntime": "45 minutes",
+    "ReleaseYear": "2023",
+    "rating": 8.5,
+    "genre": ["Adventure", "Documentary"],
+    "seasons": [
+      {
+        "id": 1,
+        "episodes": [
+          { "id": 1, "videoUrl": "http://youtube.com/episode1" },
+          { "id": 2, "videoUrl": "http://youtube.com/episode2" }
+        ]
+      },
+      {
+        "id": 2,
+        "episodes": [
+          { "id": 1, "videoUrl": "http://youtube.com/episode3" }
+        ]
+      }
+    ],
+    "Createdby": 1,
+    "Updatedby": 2
+  }

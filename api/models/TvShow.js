@@ -20,17 +20,22 @@ const TvShowSchema = new mongoose.Schema(
     imgTitle: { type: String },
     imgSm: { type: String },
     trailer: { type: String },
-    video: { type: String },
     language: [{ type: String }],
     avgRuntime: { type: String },
     ReleaseYear: { type: String },
     rating: { type: Number },
     genre: [{ type: String }],
     seasons: [
-      { type: Number, episodes: [{ type: String }] },
-      // Add more seasons as needed
+      {
+        id: { type: Number, required: true },
+        episodes: [
+          {
+            id: { type: Number, required: true },
+            videoUrl: { type: String, required: true },
+          },
+        ],
+      },
     ],
-    // Episodes: { type: Number },
     Createdby: { type: Number },
     Updatedby: { type: Number },
   },

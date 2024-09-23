@@ -24,6 +24,7 @@ router.post("/add-series", createSeries);
 
 // Routes for a single series by ID
 router.get("/fetch-series/:id", getSeriesById);
+router.get("/series/:seriesId/seasons/:seasonNumber/episodes/:episodeNumber", streamSeries);
 router.put("/update-series/:id", updateSeries);
 router.delete("/delete-series/:id", deleteSeries);
 
