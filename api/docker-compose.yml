@@ -1,0 +1,35 @@
+
+services:
+  mysql:
+    image: amheiba/mysql:5.7
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Ghaza2024
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  mongo:
+    image: amheiba/mongo:4.4
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    image: amheiba/api-app:latest
+    container_name: api-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - mongo
+    environment:
+      MYSQL_HOST: mysql
+      MONGO_HOST: mongo
+
+volumes:
+  mysql-data:
+  mongo-data:

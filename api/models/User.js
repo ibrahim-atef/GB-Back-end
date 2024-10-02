@@ -14,7 +14,7 @@
 
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = require("../assets/SQLDB/db");
+const sequelize = require("../assets/SQLDB/db").sqlDB;
 
 const User = sequelize.define("User", {
   username: {
