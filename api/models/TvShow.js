@@ -11,6 +11,7 @@
  */
 
 const mongoose = require("mongoose");
+
 const TvShowSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, unique: true },
@@ -19,14 +20,22 @@ const TvShowSchema = new mongoose.Schema(
     imgTitle: { type: String },
     imgSm: { type: String },
     trailer: { type: String },
-    video: { type: String },
     language: [{ type: String }],
     avgRuntime: { type: String },
     ReleaseYear: { type: String },
     rating: { type: Number },
     genre: [{ type: String }],
-    Seasons: [{ type: Number }],
-    Episodes: { type: Number },
+    seasons: [
+      {
+        id: { type: Number, required: true },
+        episodes: [
+          {
+            id: { type: Number, required: true },
+            videoUrl: { type: String, required: true },
+          },
+        ],
+      },
+    ],
     Createdby: { type: Number },
     Updatedby: { type: Number },
   },

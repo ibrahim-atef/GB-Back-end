@@ -96,9 +96,9 @@ const updateMovieById = async (req, res) => {
     writer,
     actors,
     url,
-    
   } = req.body;
-  try { // Try to find better way to update only given new data
+  try {
+    // Try to find better way to update only given new data
     const movie = await Movie.findById(id);
     movie.title = title;
     movie.desc = desc;

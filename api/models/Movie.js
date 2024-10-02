@@ -29,7 +29,15 @@ const MovieSchema = new mongoose.Schema(
     director: { type: String },
     writer: { type: String },
     actors: { type: String, multi: true },
-    url: { type: String },
+    parts: [
+      {
+        id: { type: Number, required: true },
+        movieTitle: { type: String, required: true },
+        movieDesc: { type: String, required: true },
+        moviePoster: { type: String, required: true },
+        videoUrl: { type: String, required: true },
+      },
+    ],
     createdBy: { type: Number, required: true },
     updatedBy: { type: Number, required: true },
   },

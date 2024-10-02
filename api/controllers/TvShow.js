@@ -10,7 +10,8 @@
  *
  *
  */
-
+const fs = require("fs");
+const path = require("path");
 const TvShow = require("../models/TvShow");
 
 const CreateTvShow = async (req, res) => {
@@ -36,6 +37,7 @@ const getTvShowById = async (req, res) => {
     res.status(500).json({ Error: err.message });
   }
 };
+
 const getAllTvShows = async (req, res) => {
   try {
     const tvShows = await TvShow.findAll({});
@@ -82,4 +84,11 @@ const deleteTvShow = async (req, res) => {
   }
 };
 
-module.exports = { getAllTvShows, CreateTvShow, getTvShowById, updateTvShow, deleteTvShow };
+module.exports = {
+  getAllTvShows,
+  CreateTvShow,
+  getTvShowById,
+  updateTvShow,
+  deleteTvShow,
+  streamTvShow,
+};
