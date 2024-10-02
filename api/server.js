@@ -19,6 +19,11 @@ const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
 const seriesRoutes = require("./routes/series");
 
+//get content metadata by id 
+//get top rated content 
+//{{id,title,img},{id,title,img}}
+//get recent content 
+
 // // CORS options
 // const corsOptions = {
 //     origin: 'http://example.com', // Allow only this origin
