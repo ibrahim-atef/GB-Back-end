@@ -13,6 +13,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const showsRoutes = require("./routes/shows");
+const ratingRoutes = require("./routes/rateContent");
 // const landingBlockRoutes = require("./routes/landingBlockRoutes");  
 const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
@@ -40,6 +41,7 @@ app.use("/user", userRoutes);
 app.use("/movies", moviesRoutes);
 app.use("/series", seriesRoutes);
 app.use("/shows", showsRoutes);
+app.use("/rating", ratingRoutes);
 // app.use("/landingBlocks", landingBlockRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
