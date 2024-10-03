@@ -14,6 +14,8 @@ const rateContent = async (req, res) => {
     const contentId = req.body.id;
     const newRating = req.body.rating;  // Rating value (1-5 stars)
     const contentType = req.body.contentType;  // Movie, TvShow, or TvSeries
+    const seasonId = req.body.seasonId;  // Optional: for rating a season
+    const episodeId = req.body.episodeId;  // Optional: for rating an episode
 
     // Validate the rating value (1 to 5 stars)
     if (newRating < 1 || newRating > 5) {
@@ -29,27 +31,40 @@ const rateContent = async (req, res) => {
         const ContentModel = contentTypesMap[contentType];
         // Find content by ID
         const content = await ContentModel.findById(contentId);
-        console.log(contentId);
         if (!content) {
             return res.status(404).json({ message: "Content not found" });
         }
 
+        // Check if we are rating a season or episode
+        let target = content;
+        if (seasonId) {
+            const season = content.seasons.find(s => s.id === seasonId);
+            if (!season) return res.status(404).json({ message: "Season not found" });
+            target = season;
+
+            if (episodeId) {
+                const episode = season.episodes.find(e => e.id === episodeId);
+                if (!episode) return res.status(404).json({ message: "Episode not found" });
+                target = episode;
+            }
+        }
+
         // Update the votes array: newRating-1 gives the index (0 for 1-star, 1 for 2-stars, etc.)
         const voteIndex = newRating - 1;
-        content.votes[voteIndex] += 1;
+        target.votes[voteIndex] += 1;
 
         // Recalculate the total number of votes and the new average rating
-        const totalVotes = content.votes.reduce((acc, val) => acc + val, 0);  // Sum of all votes
-        const totalPoints = content.votes.reduce((acc, val, idx) => acc + (val * (idx + 1)), 0);  // Weighted sum of votes (e.g., 1-star votes * 1, 2-star votes * 2, etc.)
+        const totalVotes = target.votes.reduce((acc, val) => acc + val, 0);  // Sum of all votes
+        const totalPoints = target.votes.reduce((acc, val, idx) => acc + (val * (idx + 1)), 0);  // Weighted sum of votes (e.g., 1-star votes * 1, 2-star votes * 2, etc.)
         const newAverageRating = totalVotes === 0 ? 0 : (totalPoints / totalVotes).toFixed(1);  // Calculate new average rating
 
-        // Update the content's rating and save
-        content.rating = newAverageRating;
+        // Update the rating and save the content
+        target.rating = newAverageRating;
         await content.save();
 
         return res.status(200).json({
             message: "Rating submitted successfully",
-            averageRating: content.rating,
+            averageRating: target.rating,
             totalVotes: totalVotes
         });
 
@@ -57,7 +72,6 @@ const rateContent = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
-
 // Controller to get top-rated content
 const getTopRated = async (req, res) => {
     try {

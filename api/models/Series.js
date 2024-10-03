@@ -23,11 +23,20 @@ const SeriesSchema = new mongoose.Schema(
     avgRuntime: { type: String }, // Average runtime of episodes
     releaseYear: { type: String }, // Year of release
     rating: { type: Number }, // Average rating
+    votes: {
+      type: [Number],
+      default: [0, 0, 0, 0, 0], // [1 star votes, 2 star votes, 3 star votes, 4 star votes, 5 star votes]
+    },
     genre: [{ type: String }], // Array of genres
 
     seasons: [
       {
         id: { type: Number, required: true },
+        rating: { type: Number },  // Average rating for the season
+        votes: {
+          type: [Number],
+          default: [0, 0, 0, 0, 0],  // Votes for the season
+        },
         seasonTitle: { type: String }, // Title of the season
         seasonDesc: { type: String }, // Description of the season
         seasonPoster: { type: String }, // Poster image for the season
@@ -35,6 +44,11 @@ const SeriesSchema = new mongoose.Schema(
           {
             id: { type: Number, required: true },
             episodeNumber: { type: Number }, // Episode number
+            rating: { type: Number },  // Average rating for the episode
+            votes: {
+              type: [Number],
+              default: [0, 0, 0, 0, 0],  // Votes for the episode
+            },
             episodeTitle: { type: String }, // Title of the episode
             episodeDescription: { type: String }, // Description of the episode
             time: { type: String }, // Episode runtime
