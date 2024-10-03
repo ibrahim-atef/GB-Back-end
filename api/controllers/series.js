@@ -5,7 +5,7 @@
  * @description : Controller functions to handle series CRUD operations.
  */
 
-const Series = require("../models/Sereis");
+const Series = require("../models/Series");
 
 /*** Create Series ***/
 const createSeries = async (req, res) => {

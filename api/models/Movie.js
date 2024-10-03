@@ -21,6 +21,10 @@ const MovieSchema = new mongoose.Schema(
     trailer: { type: String }, // Trailer URL
     language: [{ type: String }], // Array for multiple languages
     releaseYear: { type: String }, // Release year of the movie or part
+    votes: {
+      type: [Number],
+      default: [0, 0, 0, 0, 0], // [1 star votes, 2 star votes, 3 star votes, 4 star votes, 5 star votes]
+    },
     rating: { type: Number }, // Average rating
     genre: [{ type: String }], // Array of genres
 
