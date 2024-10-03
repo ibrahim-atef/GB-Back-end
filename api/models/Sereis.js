@@ -12,43 +12,41 @@
 const mongoose = require("mongoose");
 
 const SeriesSchema = new mongoose.Schema(
-    // {
-    //   name: { type: String, required: true },
-    //   seasons: { type: Array, required: true },
-    //   episodes: { type: Array, required: true },
-    //   coverPic: { type: String, default: "" },
-    //   yearOfPublish: { type: Number, required: true },
-    //   trailer: { type: String, required: true },
-    //   video: { type: String, required: true },
-    //   rating: { type: Number },
-    //   createdBy: { type: Number, required: true },
-    //   updatedBy: { type: Number, required: true },
-    // },
   {
     title: { type: String, required: true, unique: true },
-    desc: { type: String },
-    img: { type: String },
-    imgTitle: { type: String },
-    imgSm: { type: String },
-    trailer: { type: String },
-    language: [{ type: String }],
-    avgRuntime: { type: String },
-    ReleaseYear: { type: String },
-    rating: { type: Number },
-    genre: [{ type: String }],
+    desc: { type: String }, 
+    img: { type: String }, // For series poster or image
+    imgTitle: { type: String }, // Title image URL
+    imgSm: { type: String }, // Smaller image for thumbnail
+    trailer: { type: String }, // Trailer URL
+    language: [{ type: String }], // Array of languages
+    avgRuntime: { type: String }, // Average runtime of episodes
+    releaseYear: { type: String }, // Year of release
+    rating: { type: Number }, // Average rating
+    genre: [{ type: String }], // Array of genres
+
     seasons: [
       {
         id: { type: Number, required: true },
+        seasonTitle: { type: String }, // Title of the season
+        seasonDesc: { type: String }, // Description of the season
+        seasonPoster: { type: String }, // Poster image for the season
         episodes: [
           {
             id: { type: Number, required: true },
-            videoUrl: { type: String, required: true },
+            episodeNumber: { type: Number }, // Episode number
+            episodeTitle: { type: String }, // Title of the episode
+            episodeDescription: { type: String }, // Description of the episode
+            time: { type: String }, // Episode runtime
+            episodeImage: { type: String }, // Image URL for the episode
+            videoUrl: { type: String, required: true }, // Video URL for streaming
           },
         ],
       },
     ],
-    Createdby: { type: Number },
-    Updatedby: { type: Number },
+
+    createdBy: { type: Number, required: true }, // User ID of creator
+    updatedBy: { type: Number, required: true }, // User ID of last updater
   },
 
   { timestamps: true }

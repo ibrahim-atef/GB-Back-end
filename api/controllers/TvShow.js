@@ -1,86 +1,79 @@
 /**
- * @author : Shehab gamal
- * @description : This file contains the TvShow Mongo Model
+ * @author : Shehab Gamal
+ * @description : This file contains the TvShow controller functions.
  * @date : 03/09/2024
- *
- *
- * @param {Object} TvShowControllers - The Mongoose schema used to create the model.
- * @param {Function} controllers - The Mongoose Controller used to create the model.
- *
- *
- *
  */
-const fs = require("fs");
-const path = require("path");
+
 const TvShow = require("../models/TvShow");
 
+/*** Create TvShow ***/
 const CreateTvShow = async (req, res) => {
   try {
-    const tvShow = new TvShow({
-      ...req.body, // Spread the properties from req.body
-      Createdby: req.user.id, // Add the created by user
-      Updatedby: req.user.id, // Add the updated by user
-    });
+    const tvShowData = {
+      ...req.body,
+      Createdby: req.user.id,
+      Updatedby: req.user.id,
+    };
 
+    const tvShow = new TvShow(tvShowData);
     const savedTvShow = await tvShow.save();
-    res.status(200).json(savedTvShow);
+    res.status(201).json(savedTvShow);
   } catch (err) {
-    res.status(500).json({ Error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
+
+/*** Get TvShow by ID ***/
 const getTvShowById = async (req, res) => {
-  const { id } = req.params;
   try {
-    const tvShow = await TvShow.findById(id);
+    const tvShow = await TvShow.findById(req.params.id);
+    if (!tvShow) {
+      return res.status(404).json({ message: "TV Show not found!" });
+    }
     res.status(200).json(tvShow);
   } catch (err) {
-    res.status(500).json({ Error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
+/*** Get All TvShows ***/
 const getAllTvShows = async (req, res) => {
   try {
-    const tvShows = await TvShow.findAll({});
+    const tvShows = await TvShow.find();
     res.status(200).json(tvShows);
   } catch (err) {
-    res.status(500).json({ Error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
+/*** Update TvShow by ID ***/
 const updateTvShow = async (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;
-
   try {
-    // Using the `new: true` option to return the updated document
-    const updatedTvShow = await TvShow.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true, // Ensures the update is validated against the schema
-    });
+    const updatedTvShow = await TvShow.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, Updatedby: req.user.id },
+      { new: true, runValidators: true }
+    );
 
     if (!updatedTvShow) {
-      return res.status(404).json({ message: "TV Show not found" });
+      return res.status(404).json({ message: "TV Show not found!" });
     }
-
     res.status(200).json(updatedTvShow);
   } catch (err) {
-    res.status(500).json({ Error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
+/*** Delete TvShow by ID ***/
 const deleteTvShow = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const deletedTvShow = await TvShow.findByIdAndDelete(id);
-
+    const deletedTvShow = await TvShow.findByIdAndDelete(req.params.id);
     if (!deletedTvShow) {
-      return res.status(404).json({ message: "TV Show not found" });
+      return res.status(404).json({ message: "TV Show not found!" });
     }
-
-    res.status(200).json("TvShow has been deleted...");
+    res.status(200).json({ message: "TV Show deleted successfully" });
   } catch (err) {
-    res.status(500).json({ Error: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -90,5 +83,4 @@ module.exports = {
   getTvShowById,
   updateTvShow,
   deleteTvShow,
-  streamTvShow,
 };
