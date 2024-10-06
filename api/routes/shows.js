@@ -14,13 +14,28 @@
 
 const express = require("express");
 const router = express.Router();
-
 const TvShowController = require("../controllers/TvShow");
+const SearchController = require("../controllers/search");
+const isAuth = require("../middlewares/auth_JWT");
 
-router.get("/tvshows", TvShowController.getAllTvShows);
-router.post("/tvshows", TvShowController.CreateTvShow);
-router.get("/fetch-tvshows/:id", TvShowController.getTvShowById);
-router.put("/update-tvshows/:id", TvShowController.updateTvShow);
-router.delete("/delete-tvshows/:id", TvShowController.deleteTvShow);
+// TvShow CRUD routes
+router.get("/fetch-tvshow/:id", TvShowController.getTvShowById);
+router.post("/add-tvshow", isAuth, TvShowController.createTvShow);
+router.put("/update-tvshow/:id", isAuth, TvShowController.updateTvShowById);
+router.delete("/delete-tvshow/:id", isAuth, TvShowController.deleteTvShowById);
+
+// Seasons CRUD routes
+router.get("/fetch-season/:id", TvShowController.getTvShowPartById);
+router.post("/add-season", isAuth, TvShowController.addTvShowPart);
+router.put("/update-season/:id", isAuth, TvShowController.updateTvShowPartById);
+router.delete("/delete-season/:id", isAuth, TvShowController.deleteTvShowPartById);
+
+// Upcoming TvShows
+router.get("/upcoming-tvshows", TvShowController.getUpcomingTvShows);
+
+// Pagination & Search
+router.get("/tvshows", TvShowController.getAllTvShowsWithPagination);
+router.get("/search-tvshows", SearchController.searchTvShows);
+
 
 module.exports = router;

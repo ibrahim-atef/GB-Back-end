@@ -1,23 +1,14 @@
-/**
- * @author : Alaa Ayaad
- * @description : This file contains the Series Mongo Model
- * @date : 28/09/2024
- *
- * @param {Object} mongoose - The Mongoose module used to create the model.
- * @param {Object} SeriesSchema - The Mongoose schema used to create the model.
- * @param {Function} model - The Mongoose model used to create the model.
- *
- */
+// models/Series.js
 
 const mongoose = require("mongoose");
 
 const SeriesSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true, unique: true },
-    desc: { type: String }, 
-    img: { type: String }, // For series poster or image
+    title: { type: String, required: true, unique: true }, // Series title
+    desc: { type: String }, // Series description
+    img: { type: String }, // Series poster image URL
     imgTitle: { type: String }, // Title image URL
-    imgSm: { type: String }, // Smaller image for thumbnail
+    imgSm: { type: String }, // Small image URL
     trailer: { type: String }, // Trailer URL
     language: [{ type: String }], // Array of languages
     avgRuntime: { type: String }, // Average runtime of episodes
@@ -25,44 +16,13 @@ const SeriesSchema = new mongoose.Schema(
     rating: { type: Number }, // Average rating
     votes: {
       type: [Number],
-      default: [0, 0, 0, 0, 0], // [1 star votes, 2 star votes, 3 star votes, 4 star votes, 5 star votes]
+      default: [0, 0, 0, 0, 0], // [1 star votes, etc.]
     },
-    genre: [{ type: String }], // Array of genres
-
-    seasons: [
-      {
-        id: { type: Number, required: true },
-        rating: { type: Number },  // Average rating for the season
-        votes: {
-          type: [Number],
-          default: [0, 0, 0, 0, 0],  // Votes for the season
-        },
-        seasonTitle: { type: String }, // Title of the season
-        seasonDesc: { type: String }, // Description of the season
-        seasonPoster: { type: String }, // Poster image for the season
-        episodes: [
-          {
-            id: { type: Number, required: true },
-            episodeNumber: { type: Number }, // Episode number
-            rating: { type: Number },  // Average rating for the episode
-            votes: {
-              type: [Number],
-              default: [0, 0, 0, 0, 0],  // Votes for the episode
-            },
-            episodeTitle: { type: String }, // Title of the episode
-            episodeDescription: { type: String }, // Description of the episode
-            time: { type: String }, // Episode runtime
-            episodeImage: { type: String }, // Image URL for the episode
-            videoUrl: { type: String, required: true }, // Video URL for streaming
-          },
-        ],
-      },
-    ],
-
+    genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }], // Reference to categories
+    seasons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Season" }], // Reference to seasons
     createdBy: { type: Number, required: true }, // User ID of creator
     updatedBy: { type: Number, required: true }, // User ID of last updater
   },
-
   { timestamps: true }
 );
 

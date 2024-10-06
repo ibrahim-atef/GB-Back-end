@@ -36,11 +36,80 @@ const getMovieById = async (req, res) => {
   }
 };
 
-/*** Get All Movies ***/
-const getAllMovies = async (req, res) => {
+/*** Get All Movies (with Pagination) ***/
+const getMoviesWithPagination = async (req, res) => {
   try {
-    const movies = await Movie.find();
+    const page = parseInt(req.query.page) || 1; // default to page 1
+    const limit = parseInt(req.query.limit) || 10; // default to 10 items per page
+    const skip = (page - 1) * limit;
+
+    const movies = await Movie.find()
+      .skip(skip)
+      .limit(limit);
+    const totalMovies = await Movie.countDocuments(); // Total number of movies
+
+    res.status(200).json({
+      totalMovies,
+      currentPage: page,
+      totalPages: Math.ceil(totalMovies / limit),
+      movies,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/*** Get Upcoming Movies ***/
+const getUpcomingMovies = async (req, res) => {
+  try {
+    const currentDate = new Date();
+    const upcomingMovies = await Movie.find({
+      first_air_date: { $gt: currentDate }, // Movies with a future release date
+    });
+
+    res.status(200).json(upcomingMovies);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/*** Search Movies by Name ***/
+const searchMovies = async (req, res) => {
+  try {
+    const searchTerm = req.query.q;
+    const movies = await Movie.find({
+      name: { $regex: searchTerm, $options: "i" }, // Case-insensitive search by name
+    });
+
     res.status(200).json(movies);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/*** Search in All Models (Movies, Series, TV Shows) ***/
+// Assuming there are controllers for Series and TvShow, you could import them here
+const Series = require("../models/Series");
+const TvShow = require("../models/TvShow");
+
+const searchAll = async (req, res) => {
+  try {
+    const searchTerm = req.query.q;
+    const movies = await Movie.find({
+      name: { $regex: searchTerm, $options: "i" },
+    });
+    const series = await Series.find({
+      title: { $regex: searchTerm, $options: "i" },
+    });
+    const tvShows = await TvShow.find({
+      title: { $regex: searchTerm, $options: "i" },
+    });
+
+    res.status(200).json({
+      movies,
+      series,
+      tvShows,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -79,10 +148,90 @@ const deleteMovieById = async (req, res) => {
   }
 };
 
+/*** Movie Parts ***/
+const getMoviePartById = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie || !movie.parts) {
+      return res.status(404).json({ message: "Movie or part not found!" });
+    }
+
+    const moviePart = movie.parts.find((part) => part.id === parseInt(req.params.partId));
+    if (!moviePart) {
+      return res.status(404).json({ message: "Part not found!" });
+    }
+
+    res.status(200).json(moviePart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const addMoviePart = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found!" });
+    }
+
+    const newPart = { ...req.body, id: movie.parts.length + 1 };
+    movie.parts.push(newPart);
+    await movie.save();
+
+    res.status(201).json(newPart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const updateMoviePartById = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie || !movie.parts) {
+      return res.status(404).json({ message: "Movie or part not found!" });
+    }
+
+    const partIndex = movie.parts.findIndex((part) => part.id === parseInt(req.params.partId));
+    if (partIndex === -1) {
+      return res.status(404).json({ message: "Part not found!" });
+    }
+
+    movie.parts[partIndex] = { ...movie.parts[partIndex], ...req.body };
+    await movie.save();
+
+    res.status(200).json(movie.parts[partIndex]);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const deleteMoviePartById = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+    if (!movie || !movie.parts) {
+      return res.status(404).json({ message: "Movie or part not found!" });
+    }
+
+    movie.parts = movie.parts.filter((part) => part.id !== parseInt(req.params.partId));
+    await movie.save();
+
+    res.status(200).json({ message: "Part deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   createMovie,
   getMovieById,
-  getAllMovies,
+  getMoviesWithPagination,
+  getUpcomingMovies,
+  searchMovies,
+  searchAll,
   updateMovieById,
   deleteMovieById,
+  getMoviePartById,
+  addMoviePart,
+  updateMoviePartById,
+  deleteMoviePartById,
 };

@@ -10,21 +10,29 @@
 
 const express = require("express");
 const router = express.Router();
-const {
-  createSeries,
-  getAllSeries,
-  getSeriesById,
-  updateSeries,
-  deleteSeries,
-} = require("../controllers/series");
+const SeriesController = require("../controllers/series");
+const SearchController = require("../controllers/search");
+const isAuth = require("../middlewares/auth_JWT");
 
-// Routes for series collection
-router.get("/series", getAllSeries);
-router.post("/add-series", createSeries);
+// Series CRUD routes
+router.get("/fetch-series/:id", SeriesController.getSeriesById);
+router.post("/add-series", isAuth, SeriesController.createSeries);
+router.put("/update-series/:id", isAuth, SeriesController.updateSeries);
+router.delete("/delete-series/:id", isAuth, SeriesController.deleteSeries);
 
-// Routes for a single series by ID
-router.get("/fetch-series/:id", getSeriesById);
-router.put("/update-series/:id", updateSeries);
-router.delete("/delete-series/:id", deleteSeries);
+// Seasons CRUD routes
+router.get("/fetch-season/:id", SeriesController.getSeriesPartById);
+router.post("/add-season", isAuth, SeriesController.addSeriesPart);
+router.put("/update-season/:id", isAuth, SeriesController.updateSeriesPartById);
+router.delete("/delete-season/:id", isAuth, SeriesController.deleteSeriesPartById);
+
+// Upcoming Series
+router.get("/upcoming-series", SeriesController.getUpcomingSeries);
+
+// Pagination & Search
+router.get("/series", SeriesController.getAllSeriesWithPagination);
+router.get("/search-series", SearchController.searchSeries);
+
+
 
 module.exports = router;

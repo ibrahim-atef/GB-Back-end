@@ -1,13 +1,4 @@
-/**
- * @author : Shehab Gamal
- * @description : This file contains the TvShow Mongo Model
- * @date : 27/09/2022
- *
- * @param {Object} mongoose - The Mongoose module used to create the model.
- * @param {Object} TvShowSchema - The Mongoose schema used to create the model.
- * @param {Function} model - The Mongoose model used to create the model.
- *
- */
+// models/TvShow.js
 
 const mongoose = require("mongoose");
 
@@ -24,45 +15,13 @@ const TvShowSchema = new mongoose.Schema(
     rating: { type: Number }, // Average rating
     votes: {
       type: [Number],
-      default: [0, 0, 0, 0, 0], // [1 star votes, 2 star votes, 3 star votes, 4 star votes, 5 star votes]
+      default: [0, 0, 0, 0, 0], // [1 star votes, etc.]
     },
-    genre: [{ type: String }], // Array of genres
-    avgRuntime: { type: String }, // Average runtime of episodes
-
-    seasons: [
-      {
-        id: { type: Number, required: true }, // Season ID
-        rating: { type: Number },  // Average rating for the season
-        votes: {
-          type: [Number],
-          default: [0, 0, 0, 0, 0],  // Votes for the season
-        },
-        releaseYear: { type: String }, // Release year of the season
-        seasonTitle: { type: String }, // Season title
-        seasonDesc: { type: String }, // Season description
-        seasonPoster: { type: String }, // Season poster image URL
-
-        episodes: [
-          {
-            id: { type: Number, required: true }, // Episode ID
-            rating: { type: Number },  // Average rating for the episode
-            votes: {
-              type: [Number],
-              default: [0, 0, 0, 0, 0],  // Votes for the episode
-            },
-            episodeTitle: { type: String }, // Episode title
-            episodeDesc: { type: String }, // Episode description
-            episodePoster: { type: String }, // Episode poster image URL
-            videoUrl: { type: String, required: true }, // Video URL for the episode
-          },
-        ],
-      },
-    ],
-
+    genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }], // Reference to categories
+    seasons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Season" }], // Reference to seasons
     createdBy: { type: Number, required: true }, // User ID of the creator
     updatedBy: { type: Number, required: true }, // User ID of the last updater
   },
-
   { timestamps: true }
 );
 

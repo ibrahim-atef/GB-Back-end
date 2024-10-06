@@ -22,6 +22,7 @@ const ratingRoutes = require("./routes/rateContent");
 const moviesRoutes = require("./routes/movies");
 const userRoutes = require("./routes/user");
 const seriesRoutes = require("./routes/series");
+const glopalSearchRoutes = require("./routes/search");
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use("/movies", moviesRoutes);
 app.use("/series", seriesRoutes);
 app.use("/shows", showsRoutes);
 app.use("/rating", ratingRoutes);
+app.use("/search", glopalSearchRoutes);
 
 // Mongoose connection
 mongoose.connect(process.env.MONGO_URI, {
