@@ -8,20 +8,14 @@
  * @return {function} A middleware function to check user role.
  */
 
-const authorizeRoles = (...allowedRoles) => {
+const isAuthRole = (requiredRole) => {
     return (req, res, next) => {
-        const { user } = req;
-
-        if (!user) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
-        if (!allowedRoles.includes(user.role)) {
-            return res.status(403).json({ message: "Forbidden: You do not have the required role to access this resource." });
-        }
-
-        next();
+      if (req.user.role !== requiredRole) {
+        return res.status(403).json({ message: "Forbidden: Access is denied." });
+      }
+      next();
     };
-};
+  };
+  
 
-module.exports = authorizeRoles;
+module.exports = isAuthRole;

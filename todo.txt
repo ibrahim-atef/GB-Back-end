@@ -1,0 +1,4 @@
+1- Understand the role based system and models 
+2- create routes with required controllers for moderators with crud operations
+3- create routes with required controllers for roles with crud operations
+4- create routes with required controllers for permissions with crud operations

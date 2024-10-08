@@ -1,19 +1,4 @@
-/**
- * @author : Ameer Heiba
- * @description : This file contains the User Sequelize Model
- * @date : 28/08/2024
- *
- * @param {Object} Sequelize - The Sequelize module used to create the model.
- * @param {Object} DataTypes - The DataTypes module used to create the model.
- * @param {Object} User - The User model used to create the model.
- * @param {Object} sequelize - The Sequelize connection used to create the model.
- *
- *
- *
- */
-
 const { Sequelize, DataTypes } = require("sequelize");
-
 const sequelize = require("../assets/SQLDB/db").sqlDB;
 
 const User = sequelize.define("User", {
@@ -39,38 +24,24 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true
   },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
+  roleId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: false
-  },
-  isModerator: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
-  },
-  isPrime: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
+    references: {
+      model: 'Roles', // Name of the Role table
+      key: 'id'
+    }
   },
   resetPasswordToken: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   resetPasswordExpires: {
     type: DataTypes.DATE,
-},
+    allowNull: true,
+  }
 }, {
   timestamps: true
 });
 
 module.exports = User;
-
-
-
-
-
-
-
-
-

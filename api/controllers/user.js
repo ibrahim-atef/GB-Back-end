@@ -13,6 +13,7 @@ const getCurrentUserProfile = async (req, res) => {
 };
 
 
+
 const updateCurrentUserProfile = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });

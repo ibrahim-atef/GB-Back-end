@@ -13,6 +13,7 @@ dotenv.config();
 
 const sequelize = require("./assets/SQLDB/db");
 const initDB = require("./assets/SQLDB/initDB");
+const seedRoles = require("./scripts/roleSeed");
 
 // Routes
 const authRoutes = require("./routes/auth");
@@ -80,6 +81,10 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => {
         app.listen(process.env.DEV_API_PORT, () => {
             console.log(`Server started on port ${process.env.DEV_API_PORT}`);
+            // Seed roles on startup
+            (async () => {
+                await seedRoles();
+              })();
         });
     })
     .catch((error) => console.log("Error initializing database:", error));
