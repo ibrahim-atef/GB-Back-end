@@ -1,6 +1,7 @@
 const Role = require("../models/Role");
 const Permission = require("../models/Permission");
 const RolePermission = require("../models/RolePermission");
+const User = require("../models/User");
 
 const getAllUsers = async (req, res) => {
     try {
