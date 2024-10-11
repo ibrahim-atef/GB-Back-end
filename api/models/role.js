@@ -1,7 +1,7 @@
 const sequelize = require("../assets/SQLDB/db").sqlDB;
 const { DataTypes } = require("sequelize");
 const User = require("./User");
-const Permission = require("./permission");
+const Permission = require("./Permission");
 
 const Role = sequelize.define("Role", {
     name: {
