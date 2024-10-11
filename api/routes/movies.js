@@ -20,10 +20,10 @@ router.put("/update-movie/:id", isAuth, hasPermission("UPDATE", "MOVIES"), Movie
 router.delete("/delete-movie/:id", isAuth, hasPermission("DELETE", "MOVIES"), MovieController.deleteMovieById);
 
 // Movie Parts CRUD routes
-router.get("/fetch-movie-part/:id", MovieController.getMoviePartById);
-router.post("/add-movie-part", isAuth, MovieController.addMoviePart);
-router.put("/update-movie-part/:id", isAuth, MovieController.updateMoviePartById);
-router.delete("/delete-movie-part/:id", isAuth, MovieController.deleteMoviePartById);
+router.get("/fetch-movie-part/:id", isAuth, hasPermission("READ", "MOVIES"), MovieController.getMoviePartById);
+router.post("/add-movie-part", isAuth, hasPermission("CREATE", "MOVIES"), MovieController.addMoviePart);
+router.put("/update-movie-part/:id", isAuth, hasPermission("UPDATE", "MOVIES"), MovieController.updateMoviePartById);
+router.delete("/delete-movie-part/:id", isAuth, hasPermission("DELETE", "MOVIES"), MovieController.deleteMoviePartById);
 
 // Upcoming Movies
 router.get("/upcoming-movies", MovieController.getUpcomingMovies);
@@ -31,7 +31,5 @@ router.get("/upcoming-movies", MovieController.getUpcomingMovies);
 // Pagination & Search
 router.get("/movies", MovieController.getMoviesWithPagination);
 router.get("/search-movies", SearchController.searchMovies);
-
-
 
 module.exports = router;

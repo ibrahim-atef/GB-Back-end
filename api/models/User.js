@@ -10,7 +10,10 @@ const User = sequelize.define("User", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
   },
   password: {
     type: DataTypes.STRING,
@@ -28,14 +31,14 @@ const User = sequelize.define("User", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Roles', // Name of the Role table
+      model: 'Roles',
       key: 'id'
     }
   },
   isPrime: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false // Defaults to false (free user) if not specified
+    defaultValue: false
   },
   resetPasswordToken: {
     type: DataTypes.STRING,

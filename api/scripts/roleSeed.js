@@ -17,7 +17,8 @@ const seedRolesAndPermissions = async () => {
       { name: "usersAdmin", description: "Can manage user accounts" },
       { name: "moderatorAdmin", description: "Can manage moderator accounts" },
       { name: "movieModerator", description: "Can manage movies only" },
-      { name: "rulesAdmin", description: "Can manage roles and permissions" }, // New Role
+      { name: "rulesAdmin", description: "Can manage roles and permissions" },
+      { name: "devTeam", description: "Has full access to all resources and actions" }, // New Role
     ];
 
     // Define CRUD permissions for users, moderators, movies, roles, and permissions
@@ -61,9 +62,10 @@ const seedRolesAndPermissions = async () => {
     const usersAdmin = seededRoles.find(role => role.name === "usersAdmin");
     const moderatorAdmin = seededRoles.find(role => role.name === "moderatorAdmin");
     const movieModerator = seededRoles.find(role => role.name === "movieModerator");
-    const rulesAdmin = seededRoles.find(role => role.name === "rulesAdmin"); // New Role
+    const rulesAdmin = seededRoles.find(role => role.name === "rulesAdmin");
+    const devTeam = seededRoles.find(role => role.name === "devTeam"); // New Role
 
-    // Find permissions for each resource
+    // Assign permissions to roles
     const userPermissions = seededPermissions.filter(permission => permission.resource === "USERS");
     const moderatorPermissions = seededPermissions.filter(permission => permission.resource === "MODERATORS");
     const moviePermissions = seededPermissions.filter(permission => permission.resource === "MOVIES");
@@ -81,8 +83,11 @@ const seedRolesAndPermissions = async () => {
       await movieModerator.addPermissions(moviePermissions);
     }
     if (rulesAdmin) {
-      // Give the rulesAdmin CRUD access to both roles and permissions
       await rulesAdmin.addPermissions([...rolePermissions, ...permissionPermissions]);
+    }
+    if (devTeam) {
+      // Assign all permissions to the devTeam role
+      await devTeam.addPermissions(seededPermissions);
     }
 
     console.log("Role permissions linked successfully.");
@@ -121,6 +126,14 @@ const seedRolesAndPermissions = async () => {
         password: passwordHash,
         fullName: "Rules Admin",
         roleId: rulesAdmin ? rulesAdmin.id : null,
+        isPrime: true,
+      },
+      {
+        username: "devTeamUser",
+        email: "devteam@example.com",
+        password: passwordHash,
+        fullName: "Dev Team User",
+        roleId: devTeam ? devTeam.id : null,
         isPrime: true,
       },
     ];

@@ -4,7 +4,7 @@ const Role = require("./Role");
 const Permission = require("./Permission");
 
 const RolePermission = sequelize.define("RolePermission", {}, {
-    timestamps: false
+  timestamps: false
 });
 
 Role.belongsToMany(Permission, { through: RolePermission, foreignKey: 'roleId' });

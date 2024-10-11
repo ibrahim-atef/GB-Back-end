@@ -4,40 +4,29 @@ const User = require("../models/User");
 
 const hasPermission = (action, resource) => {
   return async (req, res, next) => {
-    try {
-      // Assuming req.user contains the authenticated user data (set by the isAuth middleware)
-      const userId = req.user.id;
+      try {
+          const user = req.user; // Assuming the user is stored in req.user after authentication
+          console.log(user);
+          const userRole = await Role.findByPk(user.roleId, {
+              include: {
+                  model: Permission,
+                  where: {
+                      action,
+                      resource
+                  }
+              }
+          });
 
-      // Find the user along with their role and permissions
-      const user = await User.findByPk(userId, {
-        include: {
-          model: Role,
-          include: {
-            model: Permission,
-            through: 'RolePermission' // Ensure it fetches permissions through the join table
+          if (!userRole) {
+              return res.status(403).json({ message: "Access denied." });
           }
-        }
-      });
 
-      if (!user || !user.Role) {
-        return res.status(403).json({ message: "Access denied: No role assigned" });
+          next();
+      } catch (error) {
+          res.status(500).json({ message: error.message });
       }
-
-      // Check if the user has the required permission
-      const hasRequiredPermission = user.Role.Permissions.some(permission =>
-        permission.action === action && permission.resource === resource
-      );
-
-      if (hasRequiredPermission) {
-        return next(); // Permission granted, move to the next middleware/controller
-      } else {
-        return res.status(403).json({ message: "Access denied: Insufficient permissions" });
-      }
-    } catch (error) {
-      console.error("Error checking permissions:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
   };
 };
+
 
 module.exports = hasPermission; 

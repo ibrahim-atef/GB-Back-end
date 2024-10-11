@@ -4,22 +4,22 @@ const RolePermission = require("../models/RolePermission");
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.findAll();
-        res.status(200).json(users);
+      const users = await User.findAll();
+      res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
 const createRole = async (req, res) => {
     const { name, description } = req.body;
     try {
-        const newRole = await Role.create({ name, description });
-        res.status(201).json(newRole);
+      const newRole = await Role.create({ name, description });
+      res.status(201).json(newRole);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
 const getAllRoles = async (req, res) => {
     try {
@@ -111,35 +111,52 @@ const deletePermission = async (req, res) => {
     }
 };
 
+// Add permission to role
 const addPermissionToRole = async (req, res) => {
-    const { roleId, permissionId } = req.params;
+    const { roleId } = req.params;
+    const { permissionIds } = req.body; // An array of permission IDs
+    
     try {
         const role = await Role.findByPk(roleId);
-        const permission = await Permission.findByPk(permissionId);
-        if (!role || !permission) {
-            return res.status(404).json({ message: "Role or Permission not found." });
+        if (!role) {
+            return res.status(404).json({ message: "Role not found." });
         }
-        await role.addPermission(permission);
-        res.status(200).json({ message: "Permission added to role." });
+
+        // Fetch the permissions based on the array of IDs
+        const permissions = await Permission.findAll({
+            where: {
+                id: permissionIds
+            }
+        });
+
+        if (permissions.length !== permissionIds.length) {
+            return res.status(404).json({ message: "One or more permissions not found." });
+        }
+
+        // Assign multiple permissions to the role
+        await role.addPermissions(permissions); // This will add to existing permissions
+        
+
+        res.status(200).json({ message: "Permissions assigned to role successfully." });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
+  };
+// Remove permission from role
 const removePermissionFromRole = async (req, res) => {
     const { roleId, permissionId } = req.params;
     try {
-        const role = await Role.findByPk(roleId);
-        const permission = await Permission.findByPk(permissionId);
-        if (!role || !permission) {
-            return res.status(404).json({ message: "Role or Permission not found." });
-        }
-        await role.removePermission(permission);
-        res.status(200).json({ message: "Permission removed from role." });
+      const role = await Role.findByPk(roleId);
+      const permission = await Permission.findByPk(permissionId);
+      if (!role || !permission) {
+        return res.status(404).json({ message: "Role or Permission not found." });
+      }
+      await role.removePermission(permission);
+      res.status(200).json({ message: "Permission removed from role." });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
 const registerModerator = async (req, res) => {}
 const signInModerator = async (req, res) => {}
@@ -159,4 +176,4 @@ module.exports = {
     removePermissionFromRole,
     registerModerator,
     signInModerator
-};
+  };

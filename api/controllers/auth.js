@@ -23,13 +23,13 @@ const register = async (req, res) => {
       return res.status(409).json({ message: "Email is already registered." });
     }
 
-    const username = email.split("@")[0] + Math.floor(Math.random() * 100);
-    const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
+    const username = `${email.split("@")[0]}${Math.floor(Math.random() * 100)}`;
+    const saltRounds = parseInt(process.env.SALT_ROUNDS, 10) || 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const userRole = await Role.findOne({ where: { name: "user" } });
     if (!userRole) {
-      return res.status(400).json({ message: "Invalid role." });
+      return res.status(400).json({ message: "User role not found." });
     }
 
     const newUser = await User.create({
@@ -47,17 +47,14 @@ const register = async (req, res) => {
       process.env.SUCCESS_REG_EMAIL_SUB, 
       process.env.SUCCESS_REG_EMAIL_BODY, 
       process.env.SUCCESS_REG_EMAIL_HTML
-    )).then(() => {
-      console.log('Email sent');
-    }).catch((error) => {
-      console.error(error);
-    });
+    )).catch(console.error);
 
     res.status(201).json(newUser);
   } catch (err) {
     res.status(500).json({ message: "Error registering user.", error: err });
   }
 };
+
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
@@ -212,11 +209,12 @@ const signInAdmin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.Role.name },
+      { id: user.id, email: user.email, role: user.Role.name, roleId: user.roleId },
       process.env.JWT_SECRET || "jwt_secret_key",
       { expiresIn: '1h' }
     );
 
+    
     res.status(200).json({
       message: "Admin sign-in successful.",
       token,
@@ -281,7 +279,7 @@ const signInModerator = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.Role.name },
+      { id: user.id, email: user.email, role: user.Role.name, roleId: user.roleId },
       process.env.JWT_SECRET || "jwt_secret_key",
       { expiresIn: '1h' }
     );
