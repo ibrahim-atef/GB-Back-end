@@ -20,7 +20,7 @@ const hasPermission = (action, resource) => {
           if (!userRole) {
               return res.status(403).json({ message: "Access denied." });
           }
-
+          console.log(userRole);
           next();
       } catch (error) {
           res.status(500).json({ message: error.message });

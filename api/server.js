@@ -50,14 +50,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Body-parser applied only to non-GET requests
-app.use((req, res, next) => {
-    if (req.method !== 'GET') {
-        bodyParser.json()(req, res, next);
-    } else {
-        next();
-    }
-});
+app.use(bodyParser.json());
+
 
 // Routes
 app.use("/auth", authRoutes);
@@ -68,6 +62,7 @@ app.use("/series", seriesRoutes);
 app.use("/shows", showsRoutes);
 app.use("/rating", ratingRoutes);
 app.use("/search", glopalSearchRoutes);
+
 
 // Mongoose connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -93,8 +88,18 @@ mongoose.connect(process.env.MONGO_URI, {
     console.log("Error connecting to MongoDB:", error);
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
+
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//     // Handle validation errors
+//     if (err.errors) {
+//       return res.status(400).json({
+//         message: "Validation errors",
+//         errors: err.errors,
+//       });
+//     }
+    
+//     console.error(err.stack);
+//     res.status(500).send("Something went wrong!");
+//   });
+

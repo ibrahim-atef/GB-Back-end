@@ -4,6 +4,7 @@ const MovieController = require("../controllers/movie");
 const SearchController = require("../controllers/search");
 const isAuth = require("../middlewares/auth_JWT");
 const hasPermission = require("../middlewares/hasPermission");
+const {validateMovie}= require("../middlewares/validator");
 
 // Protect routes with CRUD-based permissions
 
@@ -11,7 +12,7 @@ const hasPermission = require("../middlewares/hasPermission");
 router.get("/fetch-movie/:id", isAuth, hasPermission("READ", "MOVIES"), MovieController.getMovieById);
 
 // Add movie - users with CREATE permission on MOVIES can add movies
-router.post("/add-movie", isAuth, hasPermission("CREATE", "MOVIES"), MovieController.createMovie);
+router.post("/add-movie", isAuth, hasPermission("CREATE", "MOVIES"),validateMovie ,MovieController.createMovie);
 
 // Update movie - users with UPDATE permission on MOVIES can update movies
 router.put("/update-movie/:id", isAuth, hasPermission("UPDATE", "MOVIES"), MovieController.updateMovieById);
