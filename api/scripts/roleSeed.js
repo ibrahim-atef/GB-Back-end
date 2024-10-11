@@ -1,8 +1,7 @@
 const Role = require("../models/Role");
-<<<<<<< Updated upstream
-=======
 const Permission = require("../models/Permission");
->>>>>>> Stashed changes
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 const seedRolesAndPermissions = async () => {
   try {
@@ -87,8 +86,50 @@ const seedRolesAndPermissions = async () => {
     }
 
     console.log("Role permissions linked successfully.");
+
+    // Create dummy users for each role
+    const passwordHash = await bcrypt.hash("password123", 10); // Hash a default password
+
+    const users = [
+      {
+        username: "adminUser", 
+        email: "admin@example.com",
+        password: passwordHash,
+        fullName: "Admin User",
+        roleId: usersAdmin ? usersAdmin.id : null,
+        isPrime: true,
+      },
+      {
+        username: "moderatorUser",
+        email: "moderator@example.com",
+        password: passwordHash,
+        fullName: "Moderator User",
+        roleId: moderatorAdmin ? moderatorAdmin.id : null,
+        isPrime: false,
+      },
+      {
+        username: "movieModeratorUser",
+        email: "moviemod@example.com",
+        password: passwordHash,
+        fullName: "Movie Moderator",
+        roleId: movieModerator ? movieModerator.id : null,
+        isPrime: false,
+      },
+      {
+        username: "rulesAdminUser",
+        email: "rulesadmin@example.com",
+        password: passwordHash,
+        fullName: "Rules Admin",
+        roleId: rulesAdmin ? rulesAdmin.id : null,
+        isPrime: true,
+      },
+    ];
+
+    await User.bulkCreate(users);
+    console.log("Dummy users created successfully.");
+
   } catch (error) {
-    console.error("Error seeding roles and permissions:", error);
+    console.error("Error seeding roles, permissions, or users:", error);
   }
 };
 

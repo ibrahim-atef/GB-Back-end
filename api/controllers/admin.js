@@ -141,6 +141,10 @@ const removePermissionFromRole = async (req, res) => {
     }
 };
 
+const registerModerator = async (req, res) => {}
+const signInModerator = async (req, res) => {}
+
+
 module.exports = {
     getAllUsers,
     createRole,
@@ -153,4 +157,6 @@ module.exports = {
     deletePermission,
     addPermissionToRole,
     removePermissionFromRole,
+    registerModerator,
+    signInModerator
 };
