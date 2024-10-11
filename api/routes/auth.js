@@ -15,11 +15,28 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, signIn, requestPasswordReset, resetPassword } = require("../controllers/auth");
+const {
+  register,
+  signIn,
+  registerAdmin,
+  signInAdmin,
+  registerModerator,
+  signInModerator,
+  requestPasswordReset,
+  resetPassword
+} = require("../controllers/auth");
 
+// Regular user routes
 router.post("/register", register);
-
 router.post("/login", signIn);
+
+// Admin routes
+router.post("/register-admin", registerAdmin);
+router.post("/login-admin", signInAdmin);
+
+// Moderator routes
+router.post("/register-moderator", registerModerator);
+router.post("/login-moderator", signInModerator);
 
 router.post('/request-password-reset', requestPasswordReset);
 router.post('/reset-password/:token', resetPassword);

@@ -32,6 +32,11 @@ const User = sequelize.define("User", {
       key: 'id'
     }
   },
+  isPrime: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false // Defaults to false (free user) if not specified
+  },
   resetPasswordToken: {
     type: DataTypes.STRING,
     allowNull: true,
