@@ -16,19 +16,19 @@ const express = require("express");
 const router = express.Router();
 const TvShowController = require("../controllers/TvShow");
 const SearchController = require("../controllers/search");
-const isAuth = require("../middlewares/auth_JWT");
+const { authenticateJWT , checkBlacklist} = require("../middlewares/auth_JWT");
 
 // TvShow CRUD routes
 router.get("/fetch-tvshow/:id", TvShowController.getTvShowById);
-router.post("/add-tvshow", isAuth, TvShowController.createTvShow);
-router.put("/update-tvshow/:id", isAuth, TvShowController.updateTvShowById);
-router.delete("/delete-tvshow/:id", isAuth, TvShowController.deleteTvShowById);
+router.post("/add-tvshow",authenticateJWT, checkBlacklist, TvShowController.createTvShow);
+router.put("/update-tvshow/:id",authenticateJWT, checkBlacklist,TvShowController.updateTvShowById);
+router.delete("/delete-tvshow/:id",authenticateJWT, checkBlacklist,TvShowController.deleteTvShowById);
 
 // Seasons CRUD routes
 router.get("/fetch-season/:id", TvShowController.getTvShowPartById);
-router.post("/add-season", isAuth, TvShowController.addTvShowPart);
-router.put("/update-season/:id", isAuth, TvShowController.updateTvShowPartById);
-router.delete("/delete-season/:id", isAuth, TvShowController.deleteTvShowPartById);
+router.post("/add-season",authenticateJWT, checkBlacklist,TvShowController.addTvShowPart);
+router.put("/update-season/:id",authenticateJWT, checkBlacklist,TvShowController.updateTvShowPartById);
+router.delete("/delete-season/:id",authenticateJWT, checkBlacklist,TvShowController.deleteTvShowPartById);
 
 // Upcoming TvShows
 router.get("/upcoming-tvshows", TvShowController.getUpcomingTvShows);

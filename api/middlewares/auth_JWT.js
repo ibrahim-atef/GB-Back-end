@@ -10,6 +10,24 @@
 
 
 const jwt = require("jsonwebtoken");
+const redisClient = require('../assets/Redis/RedisClient');
+
+const checkBlacklist = async (req, res, next) => {
+  try {
+      const token = req.headers.authorization.split(" ")[1];
+
+      // Check if the token is blacklisted
+      const isBlacklisted = await redisClient.get(`blacklist:${token}`);
+      if (isBlacklisted) {
+          return res.status(401).json({ message: "Token is blacklisted" });
+      }
+
+      next();
+  } catch (error) {
+      console.error("Error in checkBlacklist:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -28,4 +46,4 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-module.exports = authenticateJWT;
+module.exports = { authenticateJWT, checkBlacklist }; // Export authenticateJWT;

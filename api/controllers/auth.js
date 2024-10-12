@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
 const { Op } = require('sequelize');
+const redisClient = require('../assets/Redis/RedisClient');
+const { log } = require("console");
 require('dotenv').config();
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -86,6 +88,36 @@ const signIn = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: "Error signing in.", error: err });
+  }
+};
+
+
+// controllers/auth.js
+
+const blacklistToken = async (token, expiryTime) => {
+  const ttl = Math.max(0, expiryTime - Math.floor(Date.now() / 1000));
+  try {
+    await redisClient.set(`blacklist:${token}`, 'true', 'EX', ttl);
+    console.log("Token blacklisted successfully");
+  } catch (err) {
+    console.error("Error blacklisting token: ", err);
+  }
+};
+
+
+
+
+const logoutUser = async (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.decode(token);
+  const expiryTime = decodedToken.exp;
+
+  try {
+      await blacklistToken(token, expiryTime);
+      res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -302,4 +334,6 @@ module.exports = {
   signInAdmin,
   registerModerator,
   signInModerator,
+  blacklistToken,
+  logoutUser
 };

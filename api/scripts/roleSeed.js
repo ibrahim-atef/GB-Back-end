@@ -15,6 +15,7 @@ const seedRolesAndPermissions = async () => {
     // Define the roles
     const roles = [
       { name: "usersAdmin", description: "Can manage user accounts" },
+      { name: "user", description: "normal user" },
       { name: "moderatorAdmin", description: "Can manage moderator accounts" },
       { name: "movieModerator", description: "Can manage movies only" },
       { name: "rulesAdmin", description: "Can manage roles and permissions" },
@@ -63,7 +64,8 @@ const seedRolesAndPermissions = async () => {
     const moderatorAdmin = seededRoles.find(role => role.name === "moderatorAdmin");
     const movieModerator = seededRoles.find(role => role.name === "movieModerator");
     const rulesAdmin = seededRoles.find(role => role.name === "rulesAdmin");
-    const devTeam = seededRoles.find(role => role.name === "devTeam"); // New Role
+    const devTeam = seededRoles.find(role => role.name === "devTeam");
+    const user = seededRoles.find(role => role.name === "user");
 
     // Assign permissions to roles
     const userPermissions = seededPermissions.filter(permission => permission.resource === "USERS");
@@ -88,6 +90,9 @@ const seedRolesAndPermissions = async () => {
     if (devTeam) {
       // Assign all permissions to the devTeam role
       await devTeam.addPermissions(seededPermissions);
+    }
+    if (user) {
+      await user.addPermissions(userPermissions);
     }
 
     console.log("Role permissions linked successfully.");
@@ -136,6 +141,14 @@ const seedRolesAndPermissions = async () => {
         roleId: devTeam ? devTeam.id : null,
         isPrime: true,
       },
+      {
+        username: "normalUser",
+        email: "norm@example.com",
+        password: passwordHash,
+        fullName: "Normal User",
+        roleId: user ? user.id : null,
+        isPrime: false,
+      }
     ];
 
     await User.bulkCreate(users);

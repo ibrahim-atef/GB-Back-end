@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 
-const isAuth = require("../middlewares/auth_JWT");
-const isAuthRole = require("../middlewares/IsauthorizedRole");
+
+const { authenticateJWT , checkBlacklist} = require("../middlewares/auth_JWT");
 const userController = require("../controllers/user");
 
-router.get("/profile",isAuth,isAuthRole, userController.getCurrentUserProfile);
+router.get("/profile",authenticateJWT, checkBlacklist, userController.getCurrentUserProfile);
 
-router.post("/profile",isAuth,isAuthRole, userController.updateCurrentUserProfile);
+router.post("/profile",authenticateJWT, checkBlacklist, userController.updateCurrentUserProfile);
 
 module.exports = router;

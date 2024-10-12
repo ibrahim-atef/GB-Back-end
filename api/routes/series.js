@@ -12,19 +12,19 @@ const express = require("express");
 const router = express.Router();
 const SeriesController = require("../controllers/series");
 const SearchController = require("../controllers/search");
-const isAuth = require("../middlewares/auth_JWT");
+const { authenticateJWT , checkBlacklist} = require("../middlewares/auth_JWT");
 
 // Series CRUD routes
 router.get("/fetch-series/:id", SeriesController.getSeriesById);
-router.post("/add-series", isAuth, SeriesController.createSeries);
-router.put("/update-series/:id", isAuth, SeriesController.updateSeries);
-router.delete("/delete-series/:id", isAuth, SeriesController.deleteSeries);
+router.post("/add-series",authenticateJWT, checkBlacklist, SeriesController.createSeries);
+router.put("/update-series/:id",authenticateJWT, checkBlacklist, SeriesController.updateSeries);
+router.delete("/delete-series/:id",authenticateJWT, checkBlacklist, SeriesController.deleteSeries);
 
 // Seasons CRUD routes
 router.get("/fetch-season/:id", SeriesController.getSeriesPartById);
-router.post("/add-season", isAuth, SeriesController.addSeriesPart);
-router.put("/update-season/:id", isAuth, SeriesController.updateSeriesPartById);
-router.delete("/delete-season/:id", isAuth, SeriesController.deleteSeriesPartById);
+router.post("/add-season",authenticateJWT, checkBlacklist, SeriesController.addSeriesPart);
+router.put("/update-season/:id",authenticateJWT, checkBlacklist, SeriesController.updateSeriesPartById);
+router.delete("/delete-season/:id",authenticateJWT, checkBlacklist, SeriesController.deleteSeriesPartById);
 
 // Upcoming Series
 router.get("/upcoming-series", SeriesController.getUpcomingSeries);

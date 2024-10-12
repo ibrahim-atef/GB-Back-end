@@ -1,3 +1,5 @@
+
+
 function createMsg(userId, senderEmail, subject, textBody, htmlContent) {
     return {
         to: userId, // Recipient
@@ -7,5 +9,7 @@ function createMsg(userId, senderEmail, subject, textBody, htmlContent) {
         html: htmlContent // HTML content
     };
 }
+
+
 
 module.exports = { createMsg };

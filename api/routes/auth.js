@@ -13,6 +13,7 @@
  */
 
 const express = require("express");
+const { authenticateJWT , checkBlacklist} = require("../middlewares/auth_JWT");
 const router = express.Router();
 
 const {
@@ -23,7 +24,8 @@ const {
   registerModerator,
   signInModerator,
   requestPasswordReset,
-  resetPassword
+  resetPassword,
+  logoutUser
 } = require("../controllers/auth");
 
 // Regular user routes
@@ -40,5 +42,9 @@ router.post("/login-moderator", signInModerator);
 
 router.post('/request-password-reset', requestPasswordReset);
 router.post('/reset-password/:token', resetPassword);
+
+
+//Logout
+router.get("/logout",authenticateJWT, checkBlacklist,logoutUser);
 
 module.exports = router;
