@@ -82,6 +82,8 @@ const signIn = async (req, res) => {
       { expiresIn: '1h' }
     );
 
+    await redisClient.set(`user:${user.id}:activeToken`, token);
+
     res.status(200).json({
       message: "Sign-in successful.",
       token,
@@ -114,6 +116,9 @@ const logoutUser = async (req, res) => {
 
   try {
       await blacklistToken(token, expiryTime);
+      const userId = req.user.userId;
+          // Remove the active token from Redis
+      await redisClient.del(`user:${userId}:activeToken`);
       res.status(200).json({ message: "Logout successful" });
   } catch (error) {
       console.error("Logout error:", error);

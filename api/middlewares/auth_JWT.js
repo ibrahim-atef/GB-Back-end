@@ -34,9 +34,14 @@ const authenticateJWT = (req, res, next) => {
 
   if (token) {
     const secretKey = process.env.JWT_SECRET || "jwt_secret_key";
-    jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(token, secretKey, async (err, user) => {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
+      }
+      const activeToken =await redisClient.get(`user:${user.id}:activeToken`);
+  
+      if (activeToken !== token) {
+        return res.status(401).json({ message: "Session has expired. Please log in again." });
       }
       req.user = user; // Attach user info to the request
       next();
