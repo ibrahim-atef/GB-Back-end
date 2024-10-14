@@ -1,38 +1,27 @@
-/**
- * @author : Alaa Ayaad
- * @description : This file contains the routes for Series CRUD operations using method chaining
- * @date : 28/09/2024
- *
- * @param {Object} express - The Express module used to create the routes for series.
- * @param {Object} router - The Express router to define the routes.
- * @param {route} - Route to manage series.
- */
-
 const express = require("express");
 const router = express.Router();
 const SeriesController = require("../controllers/series");
 const SearchController = require("../controllers/search");
-const { authenticateJWT , checkBlacklist} = require("../middlewares/auth_JWT");
+const { authenticateJWT, checkBlacklist } = require("../middlewares/auth_JWT");
+const hasPermission = require("../middlewares/hasPermission");
 
 // Series CRUD routes
-router.get("/fetch-series/:id", SeriesController.getSeriesById);
-router.post("/add-series",authenticateJWT, checkBlacklist, SeriesController.createSeries);
-router.put("/update-series/:id",authenticateJWT, checkBlacklist, SeriesController.updateSeries);
-router.delete("/delete-series/:id",authenticateJWT, checkBlacklist, SeriesController.deleteSeries);
+router.get("/fetch-series/:id", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getSeriesById);
+router.post("/add-series", authenticateJWT, checkBlacklist, hasPermission("CREATE", "SERIES"), SeriesController.createSeries);
+router.put("/update-series/:id", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "SERIES"), SeriesController.updateSeries);
+router.delete("/delete-series/:id", authenticateJWT, checkBlacklist, hasPermission("DELETE", "SERIES"), SeriesController.deleteSeries);
 
 // Seasons CRUD routes
-router.get("/fetch-season/:id", SeriesController.getSeriesPartById);
-router.post("/add-season",authenticateJWT, checkBlacklist, SeriesController.addSeriesPart);
-router.put("/update-season/:id",authenticateJWT, checkBlacklist, SeriesController.updateSeriesPartById);
-router.delete("/delete-season/:id",authenticateJWT, checkBlacklist, SeriesController.deleteSeriesPartById);
+router.get("/fetch-season/:id", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getSeriesPartById);
+router.post("/add-season", authenticateJWT, checkBlacklist, hasPermission("CREATE", "SERIES"), SeriesController.addSeriesPart);
+router.put("/update-season/:id", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "SERIES"), SeriesController.updateSeriesPartById);
+router.delete("/delete-season/:id", authenticateJWT, checkBlacklist, hasPermission("DELETE", "SERIES"), SeriesController.deleteSeriesPartById);
 
 // Upcoming Series
-router.get("/upcoming-series", SeriesController.getUpcomingSeries);
+router.get("/upcoming-series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getUpcomingSeries);
 
 // Pagination & Search
-router.get("/series", SeriesController.getAllSeriesWithPagination);
-router.get("/search-series", SearchController.searchSeries);
-
-
+router.get("/series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getAllSeriesWithPagination);
+router.get("/search-series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SearchController.searchSeries);
 
 module.exports = router;

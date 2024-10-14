@@ -15,14 +15,16 @@ const seedRolesAndPermissions = async () => {
     // Define the roles
     const roles = [
       { name: "usersAdmin", description: "Can manage user accounts" },
-      { name: "user", description: "normal user" },
+      { name: "user", description: "Normal user" },
       { name: "moderatorAdmin", description: "Can manage moderator accounts" },
       { name: "movieModerator", description: "Can manage movies only" },
+      { name: "seriesModerator", description: "Can manage series only" }, // New Role
+      { name: "tvShowModerator", description: "Can manage TV shows only" }, // New Role
       { name: "rulesAdmin", description: "Can manage roles and permissions" },
       { name: "devTeam", description: "Has full access to all resources and actions" }, // New Role
     ];
 
-    // Define CRUD permissions for users, moderators, movies, roles, and permissions
+    // Define CRUD permissions for users, moderators, movies, series, TV shows, roles, and permissions
     const permissions = [
       // Permissions for users
       { action: "READ", resource: "USERS" },
@@ -39,6 +41,16 @@ const seedRolesAndPermissions = async () => {
       { action: "CREATE", resource: "MOVIES" },
       { action: "UPDATE", resource: "MOVIES" },
       { action: "DELETE", resource: "MOVIES" },
+      // Permissions for series
+      { action: "READ", resource: "SERIES" },
+      { action: "CREATE", resource: "SERIES" },
+      { action: "UPDATE", resource: "SERIES" },
+      { action: "DELETE", resource: "SERIES" },
+      // Permissions for TV shows
+      { action: "READ", resource: "TV_SHOWS" },
+      { action: "CREATE", resource: "TV_SHOWS" },
+      { action: "UPDATE", resource: "TV_SHOWS" },
+      { action: "DELETE", resource: "TV_SHOWS" },
       // Permissions for roles
       { action: "READ", resource: "ROLES" },
       { action: "CREATE", resource: "ROLES" },
@@ -63,6 +75,8 @@ const seedRolesAndPermissions = async () => {
     const usersAdmin = seededRoles.find(role => role.name === "usersAdmin");
     const moderatorAdmin = seededRoles.find(role => role.name === "moderatorAdmin");
     const movieModerator = seededRoles.find(role => role.name === "movieModerator");
+    const seriesModerator = seededRoles.find(role => role.name === "seriesModerator");
+    const tvShowModerator = seededRoles.find(role => role.name === "tvShowModerator");
     const rulesAdmin = seededRoles.find(role => role.name === "rulesAdmin");
     const devTeam = seededRoles.find(role => role.name === "devTeam");
     const user = seededRoles.find(role => role.name === "user");
@@ -71,6 +85,8 @@ const seedRolesAndPermissions = async () => {
     const userPermissions = seededPermissions.filter(permission => permission.resource === "USERS");
     const moderatorPermissions = seededPermissions.filter(permission => permission.resource === "MODERATORS");
     const moviePermissions = seededPermissions.filter(permission => permission.resource === "MOVIES");
+    const seriesPermissions = seededPermissions.filter(permission => permission.resource === "SERIES");
+    const tvShowPermissions = seededPermissions.filter(permission => permission.resource === "TV_SHOWS");
     const rolePermissions = seededPermissions.filter(permission => permission.resource === "ROLES");
     const permissionPermissions = seededPermissions.filter(permission => permission.resource === "PERMISSIONS");
 
@@ -84,6 +100,12 @@ const seedRolesAndPermissions = async () => {
     if (movieModerator) {
       await movieModerator.addPermissions(moviePermissions);
     }
+    if (seriesModerator) {
+      await seriesModerator.addPermissions(seriesPermissions);
+    }
+    if (tvShowModerator) {
+      await tvShowModerator.addPermissions(tvShowPermissions);
+    }
     if (rulesAdmin) {
       await rulesAdmin.addPermissions([...rolePermissions, ...permissionPermissions]);
     }
@@ -92,7 +114,8 @@ const seedRolesAndPermissions = async () => {
       await devTeam.addPermissions(seededPermissions);
     }
     if (user) {
-      await user.addPermissions(userPermissions);
+      // Users can only read their own information
+      await user.addPermissions(userPermissions.filter(permission => permission.action === "READ"));
     }
 
     console.log("Role permissions linked successfully.");
@@ -123,6 +146,22 @@ const seedRolesAndPermissions = async () => {
         password: passwordHash,
         fullName: "Movie Moderator",
         roleId: movieModerator ? movieModerator.id : null,
+        isPrime: false,
+      },
+      {
+        username: "seriesModeratorUser",
+        email: "seriesmod@example.com",
+        password: passwordHash,
+        fullName: "Series Moderator",
+        roleId: seriesModerator ? seriesModerator.id : null,
+        isPrime: false,
+      },
+      {
+        username: "tvShowModeratorUser",
+        email: "tvshowmod@example.com",
+        password: passwordHash,
+        fullName: "TV Show Moderator",
+        roleId: tvShowModerator ? tvShowModerator.id : null,
         isPrime: false,
       },
       {

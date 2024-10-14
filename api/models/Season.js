@@ -10,11 +10,6 @@ const SeasonSchema = new mongoose.Schema(
     seasonDesc: { type: String }, // Description of the season
     seasonPoster: { type: String }, // Poster image URL
     releaseYear: { type: String }, // Release year of the season
-    rating: { type: Number }, // Average rating for the season
-    votes: {
-      type: [Number],
-      default: [0, 0, 0, 0, 0], // [1 star votes, etc.]
-    },
     episodes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Episode" }], // References to episodes
   },
   { timestamps: true }

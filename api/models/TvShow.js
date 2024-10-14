@@ -12,11 +12,6 @@ const TvShowSchema = new mongoose.Schema(
     trailer: { type: String }, // Trailer URL
     language: [{ type: String }], // Array for multiple languages
     releaseYear: { type: String }, // Release year of the show
-    rating: { type: Number }, // Average rating
-    votes: {
-      type: [Number],
-      default: [0, 0, 0, 0, 0], // [1 star votes, etc.]
-    },
     genre: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }], // Reference to categories
     seasons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Season" }], // Reference to seasons
     createdBy: { type: Number, required: true }, // User ID of the creator
