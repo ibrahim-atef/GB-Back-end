@@ -5,6 +5,8 @@
  */
 
 const TvShow = require("../models/TvShow");
+const Season = require("../models/Season");
+const Episode = require("../models/Episode");
 
 /*** Create TvShow ***/
 const createTvShow = async (req, res) => {
@@ -74,18 +76,18 @@ const getUpcomingTvShows = async (req, res) => {
 };
 
 /*** Search TvShows by name ***/
-const searchTvShows = async (req, res) => {
-  try {
-    const searchTerm = req.query.q;
-    const tvShows = await TvShow.find({
-      title: { $regex: searchTerm, $options: "i" },
-    });
+// const searchTvShows = async (req, res) => {
+//   try {
+//     const searchTerm = req.query.q;
+//     const tvShows = await TvShow.find({
+//       title: { $regex: searchTerm, $options: "i" },
+//     });
 
-    res.status(200).json(tvShows);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+//     res.status(200).json(tvShows);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 /*** Update TvShow by ID ***/
 const updateTvShowById = async (req, res) => {
@@ -196,16 +198,156 @@ const deleteTvShowPartById = async (req, res) => {
   }
 };
 
+// Get TvShow Episode by ID
+const getTvShowEpisodeById = async (req, res) => {
+  try {
+    const tvShow = await TvShow.findById(req.params.tvShowId);
+    if (!tvShow) {
+      return res.status(404).json({ message: "TvShow not found!" });
+    }
+
+    const season = tvShow.seasons.id(req.params.seasonId);
+    if (!season) {
+      return res.status(404).json({ message: "Season not found!" });
+    }
+
+    const episode = season.episodes.id(req.params.episodeId);
+    if (!episode) {
+      return res.status(404).json({ message: "Episode not found!" });
+    }
+
+    res.status(200).json(episode);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Add TvShow Episode
+const addTvShowEpisode = async (req, res) => {
+  try {
+    const tvShow = await TvShow.findById(req.params.tvShowId);
+    if (!tvShow) {
+      return res.status(404).json({ message: "TvShow not found!" });
+    }
+
+    const season = tvShow.seasons.id(req.params.seasonId);
+    if (!season) {
+      return res.status(404).json({ message: "Season not found!" });
+    }
+
+    const newEpisode = { ...req.body, id: season.episodes.length + 1 };
+    season.episodes.push(newEpisode);
+
+    await tvShow.save();
+    res.status(201).json(newEpisode);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const updateTvShowEpisodeById = async (req, res) => {
+  try {
+    const tvShow = await TvShow.findById(req.params.tvShowId);
+    if (!tvShow || !tvShow.seasons) {
+      return res.status(404).json({ message: "TvShow or seasons not found!" });
+    }
+
+    const season = tvShow.seasons.id(req.params.seasonId);
+    if (!season) {
+      return res.status(404).json({ message: "Season not found!" });
+    }
+
+    const episode = season.episodes.id(req.params.episodeId);
+    if (!episode) {
+      return res.status(404).json({ message: "Episode not found!" });
+    }
+
+    Object.assign(episode, req.body);
+
+    await tvShow.save();
+    res.status(200).json(episode);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Delete TvShow Episodeconst deleteTvShowEpisodeById = async (req, res) => {
+const deleteTvShowEpisodeById = async (req, res) => {
+  try {
+    const tvShow = await TvShow.findById(req.params.tvShowId);
+    if (!tvShow || !tvShow.seasons) {
+      return res.status(404).json({ message: "TvShow or seasons not found!" });
+    }
+
+    const season = tvShow.seasons.id(req.params.seasonId);
+    if (!season) {
+      return res.status(404).json({ message: "Season not found!" });
+    }
+
+    const episode = season.episodes.id(req.params.episodeId);
+    if (!episode) {
+      return res.status(404).json({ message: "Episode not found!" });
+    }
+
+    episode.remove();
+    await tvShow.save();
+
+    res.status(200).json({ message: "Episode deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get all seasons for a given TvShow
+const getSeasonsByTvShowId = async (req, res) => {
+  try {
+      const { TvShowId } = req.params;
+      const seasons = await Season.findAll({ where: { TvShowId } });
+
+      if (!seasons.length) {
+          return res.status(404).json({ message: "No seasons found for this series" });
+      }
+
+      res.status(200).json({ seasons });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Get all episodes for a given season
+const getEpisodesBySeasonId = async (req, res) => {
+  try {
+      const { TvShowId } = req.params;
+      const episodes = await Episode.findAll({ where: { TvShowId } });
+
+      if (!episodes.length) {
+          return res.status(404).json({ message: "No episodes found for this season" });
+      }
+
+      res.status(200).json({ episodes });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createTvShow,
   getAllTvShowsWithPagination,
   getTvShowById,
   getUpcomingTvShows,
-  searchTvShows,
+  // searchTvShows,
   updateTvShowById,
   deleteTvShowById,
   getTvShowPartById,
   addTvShowPart,
   updateTvShowPartById,
   deleteTvShowPartById,
+  getTvShowEpisodeById,
+  addTvShowEpisode,
+  updateTvShowEpisodeById,
+  deleteTvShowEpisodeById,
+  getSeasonsByTvShowId,
+  getEpisodesBySeasonId,
 };

@@ -74,46 +74,46 @@ const getUpcomingMovies = async (req, res) => {
 };
 
 /*** Search Movies by Name ***/
-const searchMovies = async (req, res) => {
-  try {
-    const searchTerm = req.query.q;
-    const movies = await Movie.find({
-      name: { $regex: searchTerm, $options: "i" }, // Case-insensitive search by name
-    });
+// const searchMovies = async (req, res) => {
+//   try {
+//     const searchTerm = req.query.q;
+//     const movies = await Movie.find({
+//       name: { $regex: searchTerm, $options: "i" }, // Case-insensitive search by name
+//     });
 
-    res.status(200).json(movies);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+//     res.status(200).json(movies);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 /*** Search in All Models (Movies, Series, TV Shows) ***/
 // Assuming there are controllers for Series and TvShow, you could import them here
-const Series = require("../models/Series");
-const TvShow = require("../models/TvShow");
+// const Series = require("../models/Series");
+// const TvShow = require("../models/TvShow");
 
-const searchAll = async (req, res) => {
-  try {
-    const searchTerm = req.query.q;
-    const movies = await Movie.find({
-      name: { $regex: searchTerm, $options: "i" },
-    });
-    const series = await Series.find({
-      title: { $regex: searchTerm, $options: "i" },
-    });
-    const tvShows = await TvShow.find({
-      title: { $regex: searchTerm, $options: "i" },
-    });
+// const searchAll = async (req, res) => {
+//   try {
+//     const searchTerm = req.query.q;
+//     const movies = await Movie.find({
+//       name: { $regex: searchTerm, $options: "i" },
+//     });
+//     const series = await Series.find({
+//       title: { $regex: searchTerm, $options: "i" },
+//     });
+//     const tvShows = await TvShow.find({
+//       title: { $regex: searchTerm, $options: "i" },
+//     });
 
-    res.status(200).json({
-      movies,
-      series,
-      tvShows,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+//     res.status(200).json({
+//       movies,
+//       series,
+//       tvShows,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 /*** Update Movie by ID ***/
 const updateMovieById = async (req, res) => {
@@ -226,8 +226,8 @@ module.exports = {
   getMovieById,
   getMoviesWithPagination,
   getUpcomingMovies,
-  searchMovies,
-  searchAll,
+  // searchMovies,
+  // searchAll,
   updateMovieById,
   deleteMovieById,
   getMoviePartById,

@@ -9,6 +9,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const compression = require("compression");
 const dotenv = require("dotenv");
+const {errorHandler} = require("./middlewares/validator");
 dotenv.config();
 
 const sequelize = require("./assets/SQLDB/db");
@@ -89,17 +90,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//     // Handle validation errors
-//     if (err.errors) {
-//       return res.status(400).json({
-//         message: "Validation errors",
-//         errors: err.errors,
-//       });
-//     }
-    
-//     console.error(err.stack);
-//     res.status(500).send("Something went wrong!");
-//   });
+
+
+app.use(errorHandler);
 
