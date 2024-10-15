@@ -19,10 +19,10 @@ router.put("/update-movie-part/:id", authenticateJWT, checkBlacklist, hasPermiss
 router.delete("/delete-movie-part/:id", authenticateJWT, checkBlacklist, hasPermission("DELETE", "MOVIES"), MovieController.deleteMoviePartById);
 
 // Upcoming Movies
-router.get("/upcoming-movies", authenticateJWT, checkBlacklist, hasPermission("READ", "MOVIES"), MovieController.getUpcomingMovies);
+router.get("/upcoming-movies", authenticateJWT, checkBlacklist, MovieController.getUpcomingMovies);
 
 // Pagination & Search
-router.get("/movies", authenticateJWT, checkBlacklist, hasPermission("READ", "MOVIES"), MovieController.getMoviesWithPagination);
-router.get("/search-movies", authenticateJWT, checkBlacklist, hasPermission("READ", "MOVIES"), SearchController.searchMovies);
+router.get("/movies", authenticateJWT, checkBlacklist, MovieController.getMoviesWithPagination);
+router.get("/search-movies", authenticateJWT, checkBlacklist, SearchController.searchMovies);
 
 module.exports = router;

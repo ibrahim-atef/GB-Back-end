@@ -15,12 +15,14 @@ const hasPermission = (action, resource) => {
                       resource
                   }
               }
+
+              
           });
 
           if (!userRole) {
-              return res.status(403).json({ message: "Access denied." });
+              return res.status(403).json({ message: "Access denied. Invalid role." });
           }
-          console.log(userRole);
+          
           next();
       } catch (error) {
           res.status(500).json({ message: error.message });

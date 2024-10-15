@@ -77,7 +77,7 @@ const signIn = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.Role.name, isPrime: user.isPrime },
+      { id: user.id, email: user.email, role: user.Role.name, roleId: user.roleId, isPrime: user.isPrime },
       process.env.JWT_SECRET || "jwt_secret_key",
       { expiresIn: '1h' }
     );

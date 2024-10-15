@@ -23,8 +23,8 @@ router.delete("/delete-season/:id", authenticateJWT, checkBlacklist, hasPermissi
 router.get("/upcoming-series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getUpcomingSeries);
 
 // Pagination & Search
-router.get("/series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getAllSeriesWithPagination);
-router.get("/search-series", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SearchController.searchSeries);
+router.get("/series", authenticateJWT, checkBlacklist, SeriesController.getAllSeriesWithPagination);
+router.get("/search-series", authenticateJWT, checkBlacklist, SearchController.searchSeries);
 
 //ADD EPISODE ROUTES 
 
