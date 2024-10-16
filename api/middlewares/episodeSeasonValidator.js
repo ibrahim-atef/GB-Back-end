@@ -6,7 +6,7 @@ const validateSeasonId = async (req, res, next) => {
     const { seasonId } = req.body;
 
     try {
-        const season = await Season.findByPk(seasonId);
+        const season = await Season.findById(seasonId);
         if (!season) {
             return res.status(404).json({ message: "Season ID not found" });
         }
@@ -20,7 +20,8 @@ const validateSeriesId = async (req, res, next) => {
     const { seriesId } = req.body;
 
     try {
-        const series = await TVShow.findByPk(seriesId);
+        const series = await Series.findById(seriesId);
+    
         if (!series) {
             return res.status(404).json({ message: "Series ID not found" });
         }
@@ -34,7 +35,7 @@ const validateTvShowId = async (req, res, next) => {
     const { tvShowId } = req.body;
 
     try{
-        const tvShow = await TVShow.findByPk(tvShowId);
+        const tvShow = await TVShow.findById(tvShowId);
         if (!tvShow) {
             return res.status(404).json({message: "TvShow ID not found"});
         }

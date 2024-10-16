@@ -9,7 +9,7 @@ const { validateMovie, validateMoviePart } = require("../middlewares/validator")
 // Protect routes with CRUD-based permissions
 router.get("/fetch-movie/:id", authenticateJWT, checkBlacklist, hasPermission("READ", "MOVIES"), MovieController.getMovieById);
 router.post("/add-movie", authenticateJWT, checkBlacklist, hasPermission("CREATE", "MOVIES"), validateMovie, MovieController.createMovie);
-router.put("/update-movie/:id", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "MOVIES"), validateMoviePart, MovieController.updateMovieById);
+router.put("/update-movie/:id", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "MOVIES"),  MovieController.updateMovieById);
 router.delete("/delete-movie/:id", authenticateJWT, checkBlacklist, hasPermission("DELETE", "MOVIES"), MovieController.deleteMovieById);
 
 // Movie Parts CRUD routes
