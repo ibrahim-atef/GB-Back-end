@@ -124,23 +124,29 @@ const deleteSeries = async (req, res) => {
 /*** Get Series Part by ID ***/
 const getSeriesPartById = async (req, res) => {
   try {
-    const series = await Series.findById(req.params.id);
-    if (!series || !series.parts) {
+    // Find the series by the series ID
+    const series = await Series.findById(req.params.id).populate('seasons'); // Populate the seasons field with actual Season documents
+
+    if (!series || !series.seasons) {
       return res.status(404).json({ message: "Series or part not found!" });
     }
 
-    const part = series.parts.find(
-      (part) => part.id === parseInt(req.params.partId)
-    );
+    // Get the partId from req.query (since you're passing it as a query param in the URL)
+    const partId = req.query.partId;
+
+    // Find the season by ObjectId from the populated seasons array
+    const part = series.seasons.find(season => season._id.toString() === partId);
+
     if (!part) {
       return res.status(404).json({ message: "Part not found!" });
     }
 
-    res.status(200).json(part);
+    res.status(200).json(part); // Return the found season
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 /*** Add Series Part ***/
 const addSeriesPart = async (req, res) => {
@@ -242,32 +248,47 @@ const getSeriesEpisodeById = async (req, res) => {
   }
 };
 
-// Add Series Episode
+const mongoose = require("mongoose");
+
 const addSeriesEpisode = async (req, res) => {
   try {
-    const series = await Series.findById(req.body.seriesId);
+    // Validate ObjectId formats
+    const { seriesId, seasonId } = req.body;
+    if (!mongoose.isValidObjectId(seriesId) || !mongoose.isValidObjectId(seasonId)) {
+      return res.status(400).json({ message: "Invalid seriesId or seasonId format." });
+    }
+
+    // Find the series by seriesId from the request body
+    const series = await Series.findById(seriesId);
     if (!series) {
       return res.status(404).json({ message: "Series not found!" });
     }
     console.log("series", series);
-    const season = series.seasons.findById(req.body.seasonId);
+
+    // Find the season by seasonId from the series' seasons array
+    const season = series.seasons.find(season => season.toString() === seasonId);
     if (!season) {
       return res.status(404).json({ message: "Season not found!" });
     }
 
     // Create a new episode object
     const newEpisode = new Episode({
-      seasonId: season._id, // Reference to the season
+      seasonId: season, // Reference to the season
       episodeNumber: req.body.episodeNumber, // From request body
       episodeTitle: req.body.episodeTitle, // From request body
       episodeDesc: req.body.episodeDesc, // From request body
       time: req.body.time, // From request body
       episodeImage: req.body.episodeImage, // From request body
-      videoUrl: req.body.videoUrl, // From request body
+      videoUrl: req.body.videoUrl // From request body
     });
 
     // Save the new episode to the database
     await newEpisode.save();
+    
+    // Ensure that the 'episodes' array is defined before pushing to it
+    if (!season.episodes) {
+      season.episodes = []; // Initialize if not already an array
+    }
 
     // Push the new episode's ID to the season's episodes array
     season.episodes.push(newEpisode._id);
