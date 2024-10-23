@@ -302,29 +302,43 @@ const addSeriesEpisode = async (req, res) => {
 
 const updateSeriesEpisodeById = async (req, res) => {
   try {
-    const series = await Series.findById(req.params.seriesId);
+    const { seriesId, seasonId, episodeId } = req.body;
+
+    // Find the series by seriesId and populate the seasons with their full documents
+    const series = await Series.findById(seriesId).populate({
+      path: 'seasons',
+      populate: { path: 'episodes' } // Populate episodes inside each season
+    });
+
     if (!series || !series.seasons) {
       return res.status(404).json({ message: "Series or seasons not found!" });
     }
 
-    const season = series.seasons.id(req.params.seasonId);
+    // Find the season within the populated seasons array
+    const season = series.seasons.find(season => season._id.toString() === seasonId);
     if (!season) {
       return res.status(404).json({ message: "Season not found!" });
     }
 
-    const episode = season.episodes.id(req.params.episodeId);
+    // Find the episode within the populated season
+    const episode = season.episodes.find(episode => episode._id.toString() === episodeId);
     if (!episode) {
       return res.status(404).json({ message: "Episode not found!" });
     }
 
+    // Update the episode with new data from the request body
     Object.assign(episode, req.body);
 
+    // Save the series document since changes were made to an embedded document
     await series.save();
+
+    // Send the updated episode as a response
     res.status(200).json(episode);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // Delete Series Episodeconst deleteSeriesEpisodeById = async (req, res) => {
 const deleteSeriesEpisodeById = async (req, res) => {

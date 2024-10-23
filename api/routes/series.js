@@ -30,7 +30,7 @@ router.get("/search-series", authenticateJWT, checkBlacklist, SearchController.s
 
 router.get("/fetch-episode/:id", authenticateJWT, checkBlacklist, hasPermission("READ", "SERIES"), SeriesController.getSeriesEpisodeById);
 router.post("/add-episode", authenticateJWT, checkBlacklist, hasPermission("CREATE", "SERIES"), validateSeasonId, validateEpisode, SeriesController.addSeriesEpisode);
-router.put("/update-episode/:id", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "SERIES"), validateSeasonId, validateEpisode, SeriesController.updateSeriesEpisodeById);
+router.put(  "/update-episode", authenticateJWT, checkBlacklist, hasPermission("UPDATE", "SERIES"), validateSeasonId, validateEpisode, SeriesController.updateSeriesEpisodeById);
 router.delete("/delete-episode/:id", authenticateJWT, checkBlacklist, hasPermission("DELETE", "SERIES"), SeriesController.deleteSeriesEpisodeById);
 
 //ADD VALIDATION
